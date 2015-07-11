@@ -14,3 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Authentication routes...
+Route::get('auth/login', ['uses' => 'Auth\AuthController@getLogin', 'as' => 'auth.login']);
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'auth.logout']);
+
+// Registration routes...
+Route::get('auth/register', ['uses' => 'Auth\AuthController@getRegister', 'as' => 'auth.register']);
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+Route::get('/home', ['middleware' => 'auth', function () {
+    return view('home');
+}]);
