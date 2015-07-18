@@ -32,7 +32,7 @@ cp .env.example .env;
 mysql -u root -proot -e "CREATE DATABASE homestead; CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret'; GRANT ALL ON homestead.* TO 'homestead'@'localhost';"
 php /var/www/artisan migrate
 php /var/www/artisan db:seed
-php /var/www/artisan artisan key:generate
+php /var/www/artisan key:generate
 
 #Make the 'vagrant ssh' command always open /var/www
 echo "cd /var/www;" >> /home/vagrant/.profile
