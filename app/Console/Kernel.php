@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \OmegaGate\Console\Commands\Inspire::class,
+        \OmegaGate\Console\Commands\Tick::class,
     ];
 
     /**

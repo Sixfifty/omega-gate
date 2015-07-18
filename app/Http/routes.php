@@ -28,4 +28,11 @@ Route::get('/home', ['middleware' => 'auth', function () {
     return view('home');
 }]);
 
-Route::get('user', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
+Route::group([
+    'prefix' => 'api'
+    ], function() {
+
+	Route::get('user/whoami', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
+	Route::post('user/placeOrder', ['uses' => 'UserController@placeOrder', 'as' => 'user.placeorder']);
+
+});

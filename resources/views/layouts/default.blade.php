@@ -2,16 +2,13 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta id="token" name="token" value="<?= csrf_token() ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/slate/bootstrap.min.css" rel="stylesheet">	
 		<link rel="stylesheet" href="/jquery-ui-1.11.4.custom/jquery-ui.css">
 		<script src="/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
 		<script src="/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
-		<script>
-		  $(function() {
-		    $( "#tabs" ).tabs();
-		  });
-		</script>
+		
 		<title>Omega Gate : @yield('page_title', 'Space simulator')</title>
 	</head>
 	<body>

@@ -18,7 +18,9 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('planet_name');
             $table->integer('asteroids');
+            $table->integer('asteroids_pending');
             $table->integer('power_cells');
+            $table->integer('power_cells_pending');
             $table->integer('metal');
             $table->integer('energy');
             $table->rememberToken();

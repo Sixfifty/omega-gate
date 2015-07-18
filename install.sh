@@ -40,3 +40,4 @@ echo "cd /var/www;" >> /home/vagrant/.profile
 #Create a shortcut to the db
 echo "alias db='mysql -uroot -proot homestead';" >> /home/vagrant/.profile
 echo "alias mirs='php artisan migrate:refresh --seed';" >> /home/vagrant/.profile
+echo "alias tick='php /var/www/artisan tick:happen';" >> /home/vagrant/.profile

@@ -29,5 +29,21 @@ class UserController extends Controller
         
     }
 
+    public function placeOrder() {
+        $input = \Input::only(['asteroids','powercells']);
+        extract($input);
+        $user = \Auth::user();
+
+        $user->orderAsteroids($asteroids);
+        //$user->orderPowerCells($powercells);
+
+        $user->save();
+
+        return [
+            'user' => $user,
+        ];
+
+    }
+
 
 }
