@@ -27,3 +27,5 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 Route::get('/home', ['middleware' => 'auth', function () {
     return view('home');
 }]);
+
+Route::get('user', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
