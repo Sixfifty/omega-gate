@@ -29,10 +29,13 @@ Route::get('/home', ['middleware' => 'auth', function () {
 }]);
 
 Route::group([
-    'prefix' => 'api'
+    'prefix' => 'api',
+    'middleware' => 'auth'
     ], function() {
 
 	Route::get('user/whoami', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
 	Route::post('user/placeOrder', ['uses' => 'UserController@placeOrder', 'as' => 'user.placeorder']);
+
+	Route::resource('research', 'ResearchController', ['only' => 'index']);
 
 });

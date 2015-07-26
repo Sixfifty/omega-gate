@@ -15,13 +15,13 @@ class CreateResearchTable extends Migration
         Schema::create('research', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->integer('metal_cost');
             $table->integer('energy_cost');
             $table->integer('time_cost');
-            $table->integer('block_1');
-            $table->integer('block_2');
-            $table->integer('block_3');
+            $table->integer('prerequisite_1_id')->references('id')->on('research')->nullable();
+            $table->integer('prerequisite_2_id')->references('id')->on('research')->nullable();
+            $table->integer('prerequisite_3_id')->references('id')->on('research')->nullable();
             $table->timestamps();
         });
     }

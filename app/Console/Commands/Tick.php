@@ -18,7 +18,7 @@ class Tick extends Command
      *
      * @var string
      */
-    protected $description = 'Command description.';
+    protected $description = 'The Tick, of DOOOM!.';
 
     /**
      * Create a new command instance.

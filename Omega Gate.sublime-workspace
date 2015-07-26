@@ -1,0 +1,712 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"mar",
+				"margin-bottom"
+			],
+			[
+				"int",
+				"integer"
+			],
+			[
+				"www",
+				"www-data"
+			],
+			[
+				"ssh",
+				"sshDir"
+			],
+			[
+				"user",
+				"username"
+			],
+			[
+				"pub",
+				"pub_keys"
+			],
+			[
+				"paddi",
+				"padding-top"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "resources/views/auth/login.blade.php",
+			"settings":
+			{
+				"buffer_size": 770,
+				"line_ending": "Unix",
+				"name": "login.blade.php"
+			}
+		},
+		{
+			"file": "app/Http/routes.php",
+			"settings":
+			{
+				"buffer_size": 1096,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Vagrantfile",
+			"settings":
+			{
+				"buffer_size": 592,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "install.sh",
+			"settings":
+			{
+				"buffer_size": 1408,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/Http/Controllers/Auth/AuthController.php",
+			"settings":
+			{
+				"buffer_size": 1859,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "resources/views/welcome.blade.php",
+			"settings":
+			{
+				"buffer_size": 248,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "resources/views/home.blade.php",
+			"settings":
+			{
+				"buffer_size": 167,
+				"line_ending": "Unix",
+				"name": "home.blade.php"
+			}
+		},
+		{
+			"file": "resources/views/layouts/default.blade.php",
+			"settings":
+			{
+				"buffer_size": 1311,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Http/Controllers/UserController.php",
+			"settings":
+			{
+				"buffer_size": 491,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/User.php",
+			"settings":
+			{
+				"buffer_size": 900,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/Http/Controllers/Auth/PasswordController.php",
+			"settings":
+			{
+				"buffer_size": 825,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Dave/Sites/omega-gate",
+		"/C/Users/Dave/Sites/omega-gate/app",
+		"/C/Users/Dave/Sites/omega-gate/app/Http",
+		"/C/Users/Dave/Sites/omega-gate/app/Http/Controllers",
+		"/C/Users/Dave/Sites/omega-gate/app/Http/Controllers/Auth",
+		"/C/Users/Dave/Sites/omega-gate/database",
+		"/C/Users/Dave/Sites/omega-gate/public",
+		"/C/Users/Dave/Sites/omega-gate/storage"
+	],
+	"file_history":
+	[
+		"/C/Users/Dave/Sites/omega-gate/app/Http/Controllers/SessionsController.php",
+		"/C/Users/Dave/Sites/omega-gate/app/Http/Controllers/AuthController.php",
+		"/C/Users/Dave/Sites/omega-gate/Vagrantfile",
+		"/C/Users/Dave/Sites/omega-gate/database/migrations/2014_10_12_000000_create_users_table.php",
+		"/C/Users/Dave/Sites/omega-gate/resources/views/layouts/default.blade.php",
+		"/C/Users/Dave/Sites/omega-gate/app/Http/routes.php",
+		"/C/Users/Dave/Sites/omega-gate/app/User.php",
+		"/C/Users/Dave/Sites/omega-gate/app/Http/Controllers/Auth/AuthController.php",
+		"/C/Users/Dave/Sites/omega-gate/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesAndRegistersUsers.php",
+		"/C/Users/Dave/Sites/omega-gate/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php",
+		"/C/Users/Dave/Sites/omega-gate/README.md",
+		"/C/Users/Dave/Sites/omega-gate/gulpfile.js",
+		"/C/Users/Dave/Sites/omega-gate/resources/views/auth/register.blade.php",
+		"/C/Users/Dave/Sites/omega-gate/resources/views/session/create.blade.php",
+		"/C/Users/Dave/Sites/omega-gate/install.sh",
+		"/C/Users/Dave/Sites/cic-landing/Vagrantfile",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/Vagrantfile",
+		"/C/Users/Dave/Sites/omega-gate/.env.example",
+		"/C/Users/Dave/Sites/speed-of-light/public/mysite/code/model/DonationPage.php",
+		"/C/Users/Dave/Desktop/Kits user table",
+		"/C/Users/Dave/Sites/speed-of-light/public/mysite/code/model/Supporter.php",
+		"/C/Users/Dave/Sites/speed-of-light/public/mysite/code/model/Donation.php",
+		"/C/Users/Dave/Sites/speed-of-light/public/mysite/code/model/School.php",
+		"/C/HashiCorp/Vagrant/embedded/gems/gems/vagrant-1.7.2/plugins/providers/virtualbox/driver/version_4_3.rb",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/unison.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/README.md",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/resources/default",
+		"/C/Users/Dave/Sites/consider/install.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/harden.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/nginx.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/pub_keys/dave.pub",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/pub_keys/jason.pub",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/app.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/redis.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/mongodb.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/vagrantprepare.sh",
+		"/C/Users/Dave/Sites/gumball3000/install.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/install.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/nvm.sh",
+		"/C/Users/Dave/Downloads/CiDLondon/configuration.php",
+		"/C/Users/Dave/Downloads/20150602-BROMLEY_FLOORS_LIMITED_LUKASZ_Re_FLOOR_QUOTATION__________________.ics",
+		"/C/Users/Dave/Downloads/20150620-Client_Meeting.ics",
+		"/C/Users/Dave/Downloads/20150620-Client_Meeting(1).ics",
+		"/C/Users/Dave/Downloads/20150620-Client_Meeting(2).ics",
+		"/C/Users/Dave/Downloads/CiDLondon/error_log",
+		"/C/Users/Dave/Downloads/CiDLondon/administrator/error_log",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/node.sh",
+		"/C/Users/Dave/Sites/SEUPF_Scripts/pubkey.sh",
+		"/C/Users/Dave/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Dave/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/Dave/Sites/cic-landing/public/index.html",
+		"/C/Users/Dave/Sites/cic-landing/install.sh",
+		"/C/Users/Dave/Sites/cic-landing/public/upgrade-call/index.html",
+		"/C/Users/Dave/Downloads/ConsiderItDone/ConsiderItDone/upgrade-call/index.html",
+		"/C/Users/Dave/Downloads/ConsiderItDone/ConsiderItDone/upgrade-call/css/style.css",
+		"/C/Users/Dave/Sites/cic-landing/dev/nginx-default",
+		"/C/Users/Dave/Sites/gumball3000/public/breakout.html"
+	],
+	"find":
+	{
+		"height": 50.0
+	},
+	"find_in_files":
+	{
+		"height": 138.0,
+		"where_history":
+		[
+			"C:\\Users\\Dave\\Sites\\speed-of-light\\public\\mysite\\code\\model",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"artisan",
+			"]",
+			"MyLights",
+			"my li",
+			"ReadOnlyField",
+			"Fields",
+			"@mail.",
+			"mail.com",
+			"grr.la",
+			"host",
+			"user",
+			"home3/considf1/public_html",
+			"line_end"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"var/www/public"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "resources/views/auth/login.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 770,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								47,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_name": "login.blade.php",
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/Http/routes.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1096,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1096,
+								1017
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Vagrantfile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 592,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								568,
+								580
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "install.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1408,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1086,
+								1086
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/Http/Controllers/Auth/AuthController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1859,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								859,
+								859
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 46.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "resources/views/welcome.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								248
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "resources/views/home.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 167,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								97,
+								97
+							]
+						],
+						"settings":
+						{
+							"auto_name": "home.blade.php",
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "resources/views/layouts/default.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1311,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								607,
+								607
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "app/Http/Controllers/UserController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 491,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								491
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 138.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "app/User.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 900,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								896,
+								896
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "app/Http/Controllers/Auth/PasswordController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 825,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Omega Gate.sublime-project",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"user",
+				"app\\User.php"
+			],
+			[
+				"route",
+				"app\\Http\\routes.php"
+			],
+			[
+				"authcontr",
+				"app\\Http\\Controllers\\AuthController.php"
+			],
+			[
+				"authenticateu",
+				"vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Auth\\AuthenticatesUsers.php"
+			],
+			[
+				"authenticates",
+				"vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Auth\\AuthenticatesAndRegistersUsers.php"
+			],
+			[
+				"routes",
+				"app\\Http\\routes.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 573.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
