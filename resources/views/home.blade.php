@@ -35,7 +35,188 @@
 		    <p>Section to show current invasions, scan other planets (when available), and order invasions.</p>
 		  </div>
 		  <div id="tabs-4">
-		    <p>Section to show tech tree, what the user has completed, and to start new research.</p>
+		    <p>Start a research to improve resources, add scans and create new types of ships!</p>
+
+		    <div id="research1" class="researchBox">
+		    	<span class="researchName">Solar Power Station</span>
+		    	<p class="researchDescription">Allows the creation of Power Cells which produce Energy.</p>
+		    	<div class="costContainer">
+			    	Time: <span class="timeCost">36</span>
+			    	Metal: <span class="metalCost">50000</span>
+			    	Energy: <span class="energyCost">50000</span>
+			    </div>
+			    <button class="researchButton" value="1">Select</button>
+		    </div>
+
+		    <div id="accordion">
+			  <h3>Resources</h3>
+			  <div>
+			    <table class="researchTable">
+		    	<tr>
+		    		<td></td>
+		    		<td>
+					    <div id="research2" class="researchBox"></div>
+					<td>
+				</tr>
+				<tr><td colspan="3"><img src="resourceTier1Img.png"></td></tr>
+				<tr>
+					<td>
+						<div id="research3" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research4" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research5" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="resourceTier2Img.png"></td></tr>
+				<tr>
+					<td>
+						<div id="research6" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research7" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research8" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="resourceTier3Img.png"></td></tr>
+				<tr>
+					<td></td>
+					<td>
+						<div id="research9" class="researchBox"></div>
+					</td>
+				</tr>
+			</table>
+			  </div>
+			  <h3>Scans</h3>
+			  <div>
+			  	<table class="researchTable">
+		    	<tr>
+		    		<td><img class="midTier" src="researchGap.png"></td>
+		    		<td>
+					    <div id="research10" class="researchBox"></div>
+					<td><img class="midTier" src="researchGap.png"></td>
+				</tr>
+				<tr><td colspan="3"><img src="scanTierImg.png"></td></tr>
+				<tr>
+					<td></td>
+		    		<td>
+					    <div id="research11" class="researchBox"></div>
+					<td>
+				</tr>
+				<tr><td colspan="3"><img src="scanTierImg.png"></td></tr>
+				<tr>
+					<td></td>
+		    		<td>
+					    <div id="research12" class="researchBox"></div>
+					<td>
+				</tr>
+				<tr><td colspan="3"><img src="scanTierImg.png"></td></tr>
+				<tr>
+					<td></td>
+		    		<td>
+					    <div id="research13" class="researchBox"></div>
+					<td>
+				</tr>
+			</table>
+			  </div>
+			  <h3>Ship Dock</h3>
+			  <div>
+			  	<table class="researchTable">
+		    	<tr>
+		    		<td></td>
+		    		<td>
+					    <div id="research14" class="researchBox"></div>
+					<td>
+				</tr>
+				<tr><td colspan="3"><img src="dockTier1Img.png"></td></tr>
+				<tr>
+					<td></td>
+					<td>
+						<div id="research15" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research16" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="dockTier2Img.png"></td></tr>
+				<tr>
+					<td></td>
+					<td><img class="midTier" src="midTier.png"></td>
+					<td>
+						<div id="research17" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="dockTier3Img.png"></td></tr>
+				<tr>
+					<td>
+						<div id="research18" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research19" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="dockTier4Img.png"></td></tr>
+				<tr>
+					<td></td>
+					<td>
+						<div id="research20" class="researchBox"></div>
+					</td>
+				</tr>
+			</table>
+			  </div>
+			  <h3>Armory</h3>
+			  <div>
+			  	<table class="researchTable">
+		    	<tr>
+		    		<td></td>
+		    		<td>
+					    <div id="research21" class="researchBox"></div>
+					<td>
+				</tr>
+				<tr><td colspan="3"><img src="armoryTier1Img.png"></td></tr>
+				<tr>
+					<td>
+						<div id="research22" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research23" class="researchBox"></div>
+					</td>
+					<td>
+						<div id="research24" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="armoryTier2Img.png"></td></tr>
+				<tr>
+					<td><img class="midTier" src="midTier.png"></td>
+					<td>
+						<div id="research25" class="researchBox">
+					</td>
+					<td>
+						<div id="research26" class="researchBox"></div>
+					</td>
+				</tr>
+				<tr><td colspan="3"><img src="armoryTier2Img.png"></td></tr>
+				<tr>
+					<td>
+						<div id="research27" class="researchBox"></div>
+					</td>
+					<td><img class="midTier" src="midTier.png"></td>
+					<td><img class="midTier" src="midTier.png"></td>
+				</tr>
+				<tr><td colspan="3"><img src="armoryTier3Img.png"></td></tr>
+				<tr>
+					<td></td>
+					<td>
+						<div id="research28" class="researchBox"></div>
+					</td>
+				</tr>
+			</table>
+			  </div>
+			</div>
 		  </div>
 		  <div id="tabs-5">
 		    <p>Section to show 'communications' received from other players and the option to send a new communication to another player.</p>
@@ -48,7 +229,13 @@
 
     <script>
 		$(function() {
-		    $( "#tabs" ).tabs();
+		    $("#tabs").tabs();
+		    $( "#accordion" ).accordion({
+		    	active: false,
+  				collapsible: true,});
+		    $("input[type=submit], button").button();
+
+		   $(".researchBox").html("<span class='researchName'>Solar Power Station</span><p class='researchDescription'>Allows the creation of Power Cells which produce Energy.</p><div class='costContainer'>Time: <span class='timeCost'>36</span>Metal: <span class='metalCost'>50000</span>Energy: <span class='energyCost'>50000</span></div><button class='researchButton' value='1'>Select</button>");
 
 		    console.log('boop!');
 
@@ -59,6 +246,12 @@
 
 			    	$('#asteroidsTotal').html(user.asteroids);
 			    	$('#powerCellsTotal').html(user.power_cells);
+			    }});
+		    }
+
+		    function researchGrab() {
+		    	$.ajax({url: '/api/research/init', success: function(data) {
+			    	
 			    }});
 		    }
 

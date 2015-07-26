@@ -1,0 +1,47 @@
+
+/* Research Tab */
+.researchBox {
+	width: 200px;
+	border: 1px solid #26b3f7;
+	border-radius: 5px;
+	background-color:rgba(0, 0, 0, 0.3);
+	margin: 0 25px;
+}
+
+.researchName {
+	display: block;
+	text-align: center;
+}
+
+.researchDescription, .researchBox .costContainer{
+	font-size: 10px;
+}
+
+.researchBox > button {
+	display: block;
+	margin: 0 auto;
+}
+
+#research1 {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.ui-accordion-content {
+	height: 400px;
+}
+
+.researchTable {
+	width: 750px;
+	display: block;
+	margin: 0 auto;
+}
+
+.researchTable .midTier {
+	margin: 0 25px;
+}
+
+.researchTable img {
+	margin-left: 120px;
+}
