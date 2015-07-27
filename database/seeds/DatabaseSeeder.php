@@ -8,7 +8,6 @@ class DatabaseSeeder extends Seeder
 
     protected $tables = [
         'users',
-        'research',
     ];
 
     /**
@@ -23,7 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->cleanDatabase();
 
         $this->call(UserTableSeeder::class);
-        $this->call(ResearchTableSeeder::class);
 
         Model::reguard();
     }

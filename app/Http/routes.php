@@ -36,6 +36,8 @@ Route::group([
 	Route::get('user/whoami', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
 	Route::post('user/placeOrder', ['uses' => 'UserController@placeOrder', 'as' => 'user.placeorder']);
 
+	Route::get('research/init', ['uses' => 'ResearchController@index', 'as' => 'research.init']);
+
 	Route::resource('research', 'ResearchController', ['only' => 'index']);
 
 });

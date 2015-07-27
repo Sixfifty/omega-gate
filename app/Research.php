@@ -14,6 +14,7 @@ class Research extends Model
     protected $table = 'research';
 
     protected $fillable = [
+        'id',
     	'name',
 		'description',
 		'metal_cost',
@@ -24,5 +25,22 @@ class Research extends Model
 		'prerequisite_3_id',
     ];
 
+    public function prerequisite_1() {
+        return $this->belongsTo('OmegaGate\Research');
+    }
+
+    public function prerequisite_2() {
+        return $this->belongsTo('OmegaGate\Research');
+    }
+
+    public function prerequisite_3() {
+        return $this->belongsTo('OmegaGate\Research');
+    }
+
+    //Onces with no requirements
+
+    //Ones where the user has met all of the requirements
+
+    
 
 }
