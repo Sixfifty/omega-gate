@@ -250,7 +250,7 @@
 		    }
 
 		    function researchGrab() {
-		    	$.ajax({url: '/api/research/init', success: function(data) {
+		    	$.ajax({url: '/api/research', success: function(data) {
 			    	
 			    }});
 		    }

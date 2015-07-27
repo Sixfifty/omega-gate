@@ -19,7 +19,7 @@ class ResearchController extends Controller
     {
     	$user = \Auth::user();
 
-    	
+    	$user->getResearchTreeArray();
 
         return Research::all();
     }
