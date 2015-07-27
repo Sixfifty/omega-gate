@@ -17,6 +17,10 @@ class ResearchController extends Controller
      */
     public function index()
     {
+    	$user = \Auth::user();
+
+    	
+
         return Research::all();
     }
 
