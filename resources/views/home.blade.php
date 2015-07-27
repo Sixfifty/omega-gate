@@ -276,6 +276,7 @@
 		    window.placeOrder = placeOrder;
 
 		    updateUser();
+		    researchGrab();
 		});
 	</script>
 @stop
