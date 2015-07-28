@@ -104,6 +104,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $completedIds = $this->getCompletedResearchIds()->toArray();
         $tickingIds = $this->getTickingResearchIds()->toArray();
+        $canResearch = empty($tickingIds);
         $availableIds = $this->getAvailableResearchIds($completedIds, $tickingIds)->toArray();
 
         $allResearch = Research::all();
@@ -119,7 +120,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             } elseif (in_array($research->id, $tickingIds)) {
                 $state = 3; //Researching
             
-            } elseif (in_array($research->id, $availableIds)) {
+            } elseif ($canResearch && in_array($research->id, $availableIds)) {
                 $state = 2; //Available
             }
 
