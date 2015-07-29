@@ -142,7 +142,7 @@
 						<div id="research16" class="researchBox"></div>
 					</td>
 				</tr>
-				<tr><td colspan="3"><img src="dockTier2Img.png"></td></tr>
+				<tr><td colspan="3"><img src="dockTier1Img.png"></td></tr>
 				<tr>
 					<td></td>
 					<td><img class="midTier" src="midTier.png"></td>
@@ -168,7 +168,7 @@
 				</tr>
 			</table>
 			  </div>
-			  <h3>Armory</h3>
+			  <h3>Armoury</h3>
 			  <div>
 			  	<table class="researchTable">
 		    	<tr>
@@ -235,24 +235,45 @@
   				collapsible: true,});
 		    $("input[type=submit], button").button();
 
-		   $(".researchBox").html("<span class='researchName'>Solar Power Station</span><p class='researchDescription'>Allows the creation of Power Cells which produce Energy.</p><div class='costContainer'>Time: <span class='timeCost'>36</span>Metal: <span class='metalCost'>50000</span>Energy: <span class='energyCost'>50000</span></div><button class='researchButton' value='1'>Select</button>");
-
 		    console.log('boop!');
 
 		    function updateUser() {
 			    $.ajax({url: '/api/user/whoami', success: function(data) {
-			    	var user = data.user;
+			    	var user = data.user,
+			    		research = user.research;
 			    	window.currentUser = user;
 
 			    	$('#asteroidsTotal').html(user.asteroids);
 			    	$('#powerCellsTotal').html(user.power_cells);
+
+			    	var researchClass;
+
+			    	for(var i = 0; i < user.research.length; i++) {
+			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button class='researchButton' value='" + research[i].id + "'>Select</button>");
+
+			    		$("#research" + research[i].id).addClass(getResearchClass(research[i].id));
+			    	}
 			    }});
 		    }
 
-		    function researchGrab() {
-		    	$.ajax({url: '/api/research', success: function(data) {
-			    	
-			    }});
+		    function getResearchClass(int) {
+		    	var researchCls;
+
+		    	switch(int) {
+		    		case 1: 
+		    			researchCls = "researchComplete";
+		    			break;
+		    		case 2:
+		    			researchCls = "researchAvailable";
+		    			break;
+		    		case 3:
+		    			researchCls = "researchInProg";
+		    			break;
+
+		    		//Case 4 default: not available
+		    	}
+
+		    	return researchCls;
 		    }
 
 		    function placeOrder(asteroids, powerCells) {
@@ -276,7 +297,6 @@
 		    window.placeOrder = placeOrder;
 
 		    updateUser();
-		    researchGrab();
 		});
 	</script>
 @stop
