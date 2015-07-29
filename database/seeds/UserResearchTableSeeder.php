@@ -24,7 +24,6 @@ class UserResearchTableSeeder extends Seeder
         	$ur->research_id = $researchIds[0];
         	$ur->user_id = $userId;
         	$ur->save();
-        	echo $ur->id . "\n";
         }
     }
 }

@@ -335,7 +335,6 @@ class CreateResearchTable extends Migration
         ];
 
         foreach($entries as $entry) {
-            echo $entry['id'];
             Research::create($entry);
         }
     }
