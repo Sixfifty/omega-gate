@@ -228,6 +228,10 @@
     </div>
 
     <script>
+    	var RESEARCH_COMPLETE = "researchComplete",
+    		RESEARCH_AVAILABLE = "researchAvailable",
+    		RESEARCH_IN_PROG = "researchInProg";
+
 		$(function() {
 		    $("#tabs").tabs();
 		    $( "#accordion" ).accordion({
@@ -249,25 +253,29 @@
 			    	var researchClass;
 
 			    	for(var i = 0; i < user.research.length; i++) {
-			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button class='researchButton' value='" + research[i].id + "'>Select</button>");
+			    		researchClass = getResearchClass(research[i].state);
+			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button id='researchButton" + research[i].id + "' class='researchButton' disabled value='" + research[i].id + "'>Select</button>");
 
-			    		$("#research" + research[i].id).addClass(getResearchClass(research[i].id));
+			    		$("#research" + research[i].id).addClass(researchClass);
+			    		if (researchClass === RESEARCH_AVAILABLE) {
+				    		$("#researchButton" + research[i].id).removeAttr('disabled');
+				    	}
 			    	}
 			    }});
 		    }
 
-		    function getResearchClass(int) {
+		    function getResearchClass(state) {
 		    	var researchCls;
 
-		    	switch(int) {
+		    	switch(state) {
 		    		case 1: 
-		    			researchCls = "researchComplete";
+		    			researchCls = RESEARCH_COMPLETE;
 		    			break;
 		    		case 2:
-		    			researchCls = "researchAvailable";
+		    			researchCls = RESEARCH_AVAILABLE;
 		    			break;
 		    		case 3:
-		    			researchCls = "researchInProg";
+		    			researchCls = RESEARCH_IN_PROG;
 		    			break;
 
 		    		//Case 4 default: not available

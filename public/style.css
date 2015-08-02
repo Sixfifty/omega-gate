@@ -1,12 +1,15 @@
 
 /* Research Tab */
+
+/* Defaults */
 .researchBox {
 	width: 200px;
 	min-height: 95px;
-	border: 1px solid #26b3f7;
+	border: 1px solid #666;
 	border-radius: 5px;
 	background-color:rgba(0, 0, 0, 0.3);
 	margin: 0 25px;
+	color: #666;
 }
 
 .researchName {
@@ -21,6 +24,11 @@
 .researchBox > button {
 	display: block;
 	margin: 0 auto;
+}
+
+.researchBox > button:disabled {
+	color: #ccc;
+
 }
 
 #research1 {
@@ -45,4 +53,23 @@
 
 .researchTable img {
 	margin-left: 120px;
+}
+
+/* Available */
+.researchBox.researchAvailable {
+	border-color: #26b3f7;
+	color: #fff;	
+}
+
+/* In Progress */
+.researchBox.researchInProg {
+	border-color: #fbcab3;
+	color: #fff;
+}
+
+
+/* Complete */
+.researchBox.researchComplete {
+	border-color: #3fe694;
+	color: #3fe694;
 }
