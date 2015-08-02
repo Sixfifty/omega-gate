@@ -9,6 +9,10 @@ class UserResearch extends Model
 
 	protected $table = 'user_research';
 
+    public static function TickResearching() {
+        return self::incomplete()->decrement('ticks_remaining');
+    }
+
     public function research() {
     	return $this->belongsTo('OmegaGate\Research');
     }

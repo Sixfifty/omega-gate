@@ -34,5 +34,6 @@ Route::group([
     ], function() {
 
 	Route::get('user/whoami', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
-	Route::post('user/placeOrder', ['uses' => 'UserController@placeOrder', 'as' => 'user.placeorder']);
+	Route::post('user/order/place', ['uses' => 'UserController@placeOrder', 'as' => 'user.order.place']);
+	Route::post('user/research/begin', ['uses' => 'UserController@beginResearch', 'as' => 'user.research.begin']);
 });

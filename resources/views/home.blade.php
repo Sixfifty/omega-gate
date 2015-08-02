@@ -287,7 +287,7 @@
 		    function placeOrder(asteroids, powerCells) {
 	    		$.ajax({
 	    			method: "POST",
-	    			url: '/api/user/placeOrder',
+	    			url: '/api/user/order/place',
 	    			headers: {
 	    				'X-CSRF-TOKEN': $('#token').attr('value')
 	    			},
@@ -303,6 +303,27 @@
 		    }
 
 		    window.placeOrder = placeOrder;
+
+		    function beginResearch(researchId) {
+	    		$.ajax({
+	    			method: "POST",
+	    			url: '/api/user/research/begin',
+	    			headers: {
+	    				'X-CSRF-TOKEN': $('#token').attr('value')
+	    			},
+	    			data: {
+	    				researchId: researchId
+	    			},
+	    			success: function(data) {
+	    				console.log('herp');
+	    				console.log(data);
+	    			}
+	    		});
+		    }
+
+		    window.beginResearch = beginResearch;
+
+		    
 
 		    updateUser();
 		});

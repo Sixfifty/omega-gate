@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 
 use OmegaGate\Http\Requests;
 use OmegaGate\Http\Controllers\Controller;
+use OmegaGate\Research;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -19,13 +20,13 @@ class UserController extends Controller
 
         $user = false;
 
-        if(\Auth::check()) {
+        if(!\Auth::check()) {
             $user = \Auth::user();
         }
 
-        return [
+        return $this->respond([
             'user' => $user,
-        ];
+        ]);
         
     }
 
@@ -39,9 +40,32 @@ class UserController extends Controller
 
         $user->save();
 
-        return [
+        return $this->respond([
             'user' => $user,
-        ];
+        ]);
+
+    }
+
+    public function beginResearch() {
+        $researchId = \Input::get('researchId');
+        $research = Research::findOrFail($researchId);
+
+        $user = \Auth::user();
+        
+        if(!$user->canResearch($research)) {
+            return $this->respondBadRequest('Cannot research this item');
+        }
+
+        $userResearch = $user->beginResearch($research);
+        $user->save();
+
+        return $this->respond([
+            'user' => $user,
+            'user_research' => $userResearch,
+            'research' => $research,
+        ]);
+        
+
 
     }
 

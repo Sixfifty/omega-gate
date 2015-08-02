@@ -98,6 +98,47 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return Research::availableToResearch($completedIds, $tickingIds)->lists('id');
     }
 
+    public function canResearch(Research $research) {
+
+        //Do they have the resources?
+        if(($this->metal < $research->metal_cost) || ($this->energy < $research->energy_cost)) return false;
+
+        $tickingIds = $this->getTickingResearchIds();
+
+        //Researching anything? No you can't research.
+        if(!$tickingIds) return false;
+
+        $completedIds = $this->getCompletedResearchIds();
+
+        //Is it in the completed list? Then you can't do it.
+        if(in_array($research->id, $completedIds->toArray())) return false;
+
+
+        //Allright, now we get to the heavy query...
+        $availableIds = $this->getAvailableResearchIds($completedIds, $tickingIds);
+        
+        //Is the ID not in the list of available IDs? You can't research it.
+        if(!in_array($research->id, $availableIds->toArray())) return false;
+
+        //Still here? Good.
+        return true;
+
+
+    }
+
+    public function beginResearch(Research $research) {
+        $userResearch = new UserResearch();
+        $userResearch->ticks_remaining = $research->time_cost;
+        $userResearch->research_id = $research->id;
+        $userResearch->user_id = $this->id;
+        $userResearch->save();
+
+        $this->metal -= $research->metal_cost;
+        $this->energy -= $research->energy_cost;
+
+        return $userResearch;
+    }
+
     public function getResearchTreeArray() {
 
         $output = [];
