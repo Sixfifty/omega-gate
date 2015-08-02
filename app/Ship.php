@@ -15,6 +15,7 @@ class Ship extends Model
 		'speed',
 		'metal_cost',
 		'energy_cost',
+		'stealth',
 		'prerequisite_id',
 	];
 
