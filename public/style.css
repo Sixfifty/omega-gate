@@ -12,6 +12,34 @@
 	margin-right: 25px;
 }
 
+
+/* Resource Tab */
+#currentResourceContainer, #resourceOrderForm {
+	border: 1px solid #88bad4;
+	border-radius: 5px;
+	background-color:rgba(50, 50, 200, 0.3);
+	padding: 5px;
+	margin-bottom: 50px;
+}
+
+#currentResourceContainer div {
+	font-size:12px;
+}
+
+#resourceOrderForm table {
+	background: none;
+}
+
+#asteroidOrder, #powerCellOrder {
+	margin: 5px;
+}
+
+#resourceSubmit {
+	display: block;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
 /* Research Tab */
 #researchError {
 	font-size: 12px;

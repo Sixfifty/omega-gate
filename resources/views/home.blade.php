@@ -11,19 +11,31 @@
 		    <li><a href="#tabs-4">Research</a></li>
 		  </ul>
 		  <div id="tabs-1">
-		    <p>Open by default. Shows the user their current number of asteroids and power cells, also includes order form to order more asteroids/power cells.</p>
+		  	<div id="currentResourceContainer">
+			  	<h4>Current Resources:</h4>
+			    <div>Asteroids: <span id="asteroidsTotal"></span></div>
+			    <div>Power Cells: <span id="powerCellsTotal"></span></div>
+			</div>
 
-		    Asteroids: <div id="asteroidsTotal"></div><br/>
-		    Power Cells: <div id="powerCellsTotal"></div><br/>
-
-		    [Order Form Test]<br/>
-		    <form>
-		    	Asteroids: 
-		    	<input type="number" id="asteroidOrder"> Current Cost: <span id="asteroidCost"/><br/>
-		    	Power Cells: 
-		    	<input type="number" id="powerCellOrder"> Current Cost: <span id="powerCellCost"/><br/>
-		    	<input type="submit">
-		    </form>
+		    <div id="resourceOrderForm">
+		    	<h4>[Order Form]</h4>
+			    <form>
+			    	<table>
+			    		<tr>
+			    			<td>Asteroids:</td>
+			    			<td><input type="number" id="asteroidOrder"></td> 
+			    			<td>Current Cost: <span id="asteroidCost"/></td>
+			    		</tr>
+			    		<tr>
+			    			<td>Power Cells:</td>
+			    			<td><input type="number" id="powerCellOrder"></td>
+			    			<td>Current Cost: <span id="powerCellCost"/></td>
+			    		</tr>
+			    		<tr>
+			    			<td colspan=3><input type="submit" id="resourceSubmit"></td>
+			    	</table>
+			    </form>
+			</div>
 		  </div>
 		  <div id="tabs-2">
 		    <p>Section to show current army and order form to order additional units.</p>
