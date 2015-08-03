@@ -24,7 +24,13 @@
 				<a class="navbar-brand" href="/">Omega Gate</a>
 			</div>
 			<div class="navbar-collapse collapse navbar-responsive-collapse">
+
 				<ul class="nav navbar-nav navbar-right">
+				<li class="headerSummary">
+					<span id="userMetal"></span>
+					<span id="userEnergy"></span>
+					<span id="userPlanet"></span>
+				</li>
 					@if (Auth::check())
 					<li><a href="{{ route('auth.logout') }}"><i class="fa fa-sign-out fa-fw"></i> Log out</a></li>
 					@else

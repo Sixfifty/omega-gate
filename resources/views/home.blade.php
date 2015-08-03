@@ -1,8 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="container">
-        <h1>Home</h1>
-        <p>You are logged in, JavaScript happen!</p>
+        <h1 id="welcome"></h1>
 
         <div id="tabs">
 		  <ul>
@@ -10,8 +9,6 @@
 		    <li><a href="#tabs-2">Army</a></li>
 		    <li><a href="#tabs-3">Conquer</a></li>
 		    <li><a href="#tabs-4">Research</a></li>
-		    <li><a href="#tabs-5">Communication</a></li>
-		    <li><a href="#tabs-6">Help</a></li>
 		  </ul>
 		  <div id="tabs-1">
 		    <p>Open by default. Shows the user their current number of asteroids and power cells, also includes order form to order more asteroids/power cells.</p>
@@ -36,17 +33,13 @@
 		  </div>
 		  <div id="tabs-4">
 		    <p>Start a research to improve resources, add scans and create new types of ships!</p>
-
-		    <div id="research1" class="researchBox">
-		    	<span class="researchName">Solar Power Station</span>
-		    	<p class="researchDescription">Allows the creation of Power Cells which produce Energy.</p>
-		    	<div class="costContainer">
-			    	Time: <span class="timeCost">36</span>
-			    	Metal: <span class="metalCost">50000</span>
-			    	Energy: <span class="energyCost">50000</span>
-			    </div>
-			    <button class="researchButton" value="1">Select</button>
+		    <div id="researchError" class='ui-state-error ui-corner-all' hidden>
+		    	<p>
+		    		<span class="ui-icon ui-icon-alert"></span> 
+		    		<strong>Alert:</strong>You cannot afford that research!
 		    </div>
+
+		    <div id="research1" class="researchBox"></div>
 
 		    <div id="accordion">
 			  <h3>Resources</h3>
@@ -218,12 +211,6 @@
 			  </div>
 			</div>
 		  </div>
-		  <div id="tabs-5">
-		    <p>Section to show 'communications' received from other players and the option to send a new communication to another player.</p>
-		  </div>
-		  <div id="tabs-6">
-		    <p>Help. Comes with a basic how to play and local samaritan number.</p>
-		  </div>
 		</div>
     </div>
 
@@ -239,14 +226,15 @@
   				collapsible: true,});
 		    $("input[type=submit], button").button();
 
-		    console.log('boop!');
-
 		    function updateUser() {
 			    $.ajax({url: '/api/user/whoami', success: function(data) {
 			    	var user = data.user,
 			    		research = user.research;
 			    	window.currentUser = user;
 
+					updateResources();
+					$('#userPlanet').html('Planet ' + user.planet_name);
+					$('#welcome').html('Greetings, Commander ' + user.username + '!');
 			    	$('#asteroidsTotal').html(user.asteroids);
 			    	$('#powerCellsTotal').html(user.power_cells);
 
@@ -254,14 +242,26 @@
 
 			    	for(var i = 0; i < user.research.length; i++) {
 			    		researchClass = getResearchClass(research[i].state);
-			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button id='researchButton" + research[i].id + "' class='researchButton' disabled value='" + research[i].id + "'>Select</button>");
+			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button id='researchButton" + research[i].id + "' class='researchButton' disabled onClick='beginResearch(" + research[i].id + ")'>Select</button><span class='researchPending hidden'>Researching...</span>");
 
 			    		$("#research" + research[i].id).addClass(researchClass);
-			    		if (researchClass === RESEARCH_AVAILABLE) {
+			    		if (researchClass === RESEARCH_COMPLETE) {
+			    			$("#researchButton" + research[i].id).hide();
+			    			$("#research" + research[i].id).children(".costContainer").hide();
+				    	} else if (researchClass === RESEARCH_AVAILABLE) {
 				    		$("#researchButton" + research[i].id).removeAttr('disabled');
+				    	} else if (researchClass === RESEARCH_IN_PROG) {
+				    		$("#researchButton" + research[i].id).hide();
+				    		$("#research" + research[i].id).children(".costContainer").hide();
+				    		$("#research" + research[i].id).children(".researchPending").removeClass("hidden");
 				    	}
 			    	}
 			    }});
+		    }
+
+		    function updateResources() {
+		    	$('#userMetal').html('Metal: ' + window.currentUser.metal);
+				$('#userEnergy').html('Energy: ' + window.currentUser.energy);
 		    }
 
 		    function getResearchClass(state) {
@@ -305,20 +305,31 @@
 		    window.placeOrder = placeOrder;
 
 		    function beginResearch(researchId) {
-	    		$.ajax({
-	    			method: "POST",
-	    			url: '/api/user/research/begin',
-	    			headers: {
-	    				'X-CSRF-TOKEN': $('#token').attr('value')
-	    			},
-	    			data: {
-	    				researchId: researchId
-	    			},
-	    			success: function(data) {
-	    				console.log('herp');
-	    				console.log(data);
-	    			}
-	    		});
+		    	$("#researchError").hide();
+		    	if (window.currentUser.metal >= $('#research' + researchId).find('.metalCost').text() && window.currentUser.energy >= $('#research' + researchId).find('.energyCost').text()) {
+		    		$.ajax({
+		    			method: "POST",
+		    			url: '/api/user/research/begin',
+		    			headers: {
+		    				'X-CSRF-TOKEN': $('#token').attr('value')
+		    			},
+		    			data: {
+		    				researchId: researchId
+		    			},
+		    			success: function(data) {
+		    				$("#research" + researchId).addClass(RESEARCH_IN_PROG);
+		    				$("#researchButton" + researchId).hide();
+					    	$("#research" + researchId).children(".costContainer").hide();
+					    	$("#research" + researchId).children(".researchPending").removeClass("hidden");
+		    				//update metal and energy totals
+		    				window.currentUser.metal = data.user.metal;
+		    				window.currentUser.energy = data.user.energy;
+		    				updateResources();
+		    			}
+		    		});
+	    		} else {
+	    			$("#researchError").show();
+	    		}
 		    }
 
 		    window.beginResearch = beginResearch;

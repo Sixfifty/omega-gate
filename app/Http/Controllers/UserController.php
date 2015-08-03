@@ -20,7 +20,7 @@ class UserController extends ApiController
 
         $user = false;
 
-        if(!\Auth::check()) {
+        if(\Auth::check()) {
             $user = \Auth::user();
         }
 

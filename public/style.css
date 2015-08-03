@@ -1,5 +1,28 @@
 
+.hidden {
+	display: none;
+}
+
+/* Header */
+.headerSummary {
+	margin: 15px;
+}
+
+#userMetal, #userEnergy {
+	margin-right: 25px;
+}
+
 /* Research Tab */
+#researchError {
+	font-size: 12px;
+	margin-bottom: 25px;
+	padding-top: 5px;
+}
+
+#researchError .ui-icon-alert {
+	float:left;
+	margin-right: 5px;
+}
 
 /* Defaults */
 .researchBox {
@@ -12,12 +35,12 @@
 	color: #666;
 }
 
-.researchName {
+.researchName, .researchPending {
 	display: block;
 	text-align: center;
 }
 
-.researchDescription, .researchBox .costContainer{
+.researchDescription, .researchBox .costContainer, .researchPending {
 	font-size: 10px;
 }
 
@@ -28,7 +51,6 @@
 
 .researchBox > button:disabled {
 	color: #ccc;
-
 }
 
 #research1 {
@@ -64,7 +86,7 @@
 /* In Progress */
 .researchBox.researchInProg {
 	border-color: #fbcab3;
-	color: #fff;
+	color: #fbcab3;
 }
 
 
