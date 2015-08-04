@@ -36,7 +36,7 @@ class UserController extends ApiController
         $user = \Auth::user();
 
         $user->orderAsteroids($asteroids);
-        //$user->orderPowerCells($powercells);
+        $user->orderPowerCells($powercells);
 
         $user->save();
 

@@ -12,7 +12,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 {
     use Authenticatable, CanResetPassword;
 
-    CONST ASTEROIDCOST = 200;
+    CONST 
+        ASTEROID_COST = 200,
+        POWERCELL_COST = 200,
+        TICK_ENERGY = 1000,
+        TICK_METAL = 1000;
+
 
     /**
      * The database table used by the model.
@@ -36,11 +41,41 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $hidden = ['password', 'remember_token', 'created_at', 'updated_at'];
 
     /**
+     * Bootstrap any model events.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        //Start the user with these amounts
+        User::creating(function ($user) {
+            $user->metal = 1000;
+            $user->asteroids = 5;
+        });
+        parent::boot();
+    }
+
+    /**
      * Get the current asteroid cost for this user
      */
     public function getAsteroidCostAttribute() {
+
+        $multiplier = 1;
+        if($this->hasResearched(5)) $multiplier = 0.5;
         
-        return self::ASTEROIDCOST * ($this->asteroids + $this->asteroids_pending);
+        return (self::ASTEROID_COST * ($this->asteroids + $this->asteroids_pending)) * $multiplier;
+    }
+
+    /**
+     * Get the current power cell cost for this user
+     */
+    public function getPowerCellCostAttribute() {
+
+        $multiplier = 1;
+        if($this->hasResearched(6)) $multiplier = 0.5;
+
+        return (self::POWERCELL_COST * ($this->power_cells + $this->power_cells_pending)) * $multiplier;
+        
     }
 
     public function user_research() {
@@ -54,6 +89,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             'planet_name' => $this->planet_name,
             'power_cells' => (int) $this->power_cells,
             'power_cells_pending' => (int) $this->power_cells_pending,
+            'power_cell_cost' => (int) $this->power_cell_cost,
             'asteroids' => (int) $this->asteroids,
             'asteroids_pending' => (int) $this->asteroids_pending,
             'asteroid_cost' => (int) $this->asteroid_cost,
@@ -75,6 +111,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
+    public function orderPowerCells($powerCellsOrdered) {
+
+        while($powerCellsOrdered > 0) {
+            $this->energy -= $this->power_cell_cost;
+            $this->power_cells_pending++;
+            $powerCellsOrdered--;
+        }
+
+        return $this->power_cells_pending;
+
+    }
+
     /**
      * Convert pending asteroids to real asteroids.
      */
@@ -82,6 +130,37 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->asteroids += $this->asteroids_pending;
         $this->asteroids_pending = 0;
 
+    }
+
+    /**
+     * Convert pending power cells to real power cells.
+     */
+    public function deliverPowerCells() {
+        $this->power_cells += $this->power_cells_pending;
+        $this->power_cells_pending = 0;
+
+    }
+
+    public function tickMetal() {
+        $multiplier = 1;
+        if($this->hasResearched(2)) $multiplier = 1.5;
+        if($this->hasResearched(8)) $multiplier = 2;
+        $this->metal += (self::TICK_METAL * $multiplier);
+
+    }
+
+    public function tickEnergy() {
+        $multiplier = 1;
+        if($this->hasResearched(3)) $multiplier = 1.5;
+        if($this->hasResearched(7)) $multiplier = 2;
+
+        $this->energy += (self::TICK_ENERGY * $multiplier);
+    }
+
+    public function tickResources() {
+        $this->tickMetal();
+        $this->tickEnergy();
+        
     }
 
     //Fetch the list of IDs we have researched
@@ -137,6 +216,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->energy -= $research->energy_cost;
 
         return $userResearch;
+    }
+
+    public function hasResearched($id) {
+        //Attempt to pull the item
+        if(!$this->user_research->contains('research_id', $id)) return false;
+
+        foreach($this->user_research as $userResearch) {
+            if($userResearch->research_id == $id) {
+                return ! $userResearch->ticks_remaining;
+            }
+        }
+        
+        //Still here?
+        return false; //Just in case
+        
     }
 
     public function getResearchTreeArray() {
