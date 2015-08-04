@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserResearchTable extends Migration
+class CreateUserShipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateUserResearchTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_research', function (Blueprint $table) {
+        Schema::create('user_ships', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ticks_remaining');
             $table->integer('user_id')->references('id')->on('users');
-            $table->integer('research_id')->references('id')->on('research');
+            $table->integer('ship_id')->references('id')->on('ships');
+            $table->integer('quantity');
+            $table->integer('quantity_pending');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateUserResearchTable extends Migration
      */
     public function down()
     {
-        Schema::drop('user_research');
+        Schema::drop('user_ships');
     }
 }
