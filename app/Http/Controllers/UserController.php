@@ -30,7 +30,7 @@ class UserController extends ApiController
         
     }
 
-    public function placeOrder() {
+    public function placeResourceOrder() {
         $input = \Input::only(['asteroids','powercells']);
         extract($input);
         $user = \Auth::user();

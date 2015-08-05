@@ -15,9 +15,9 @@
 
 /* Resource Tab */
 #currentResourceContainer, #resourceOrderForm {
-	border: 1px solid #88bad4;
+	border: 1px solid #40e0d0;
 	border-radius: 5px;
-	background-color:rgba(50, 50, 200, 0.3);
+	background-color:rgba(50, 200, 50, 0.2);
 	padding: 5px;
 	margin-bottom: 50px;
 }
@@ -39,6 +39,31 @@
 	margin: 0 auto;
 	margin-top: 10px;
 }
+
+
+/* Army Tab */
+
+#armyOrderForm {
+	border: 1px solid #88bad4;
+	border-radius: 5px;
+	background-color:rgba(50, 50, 200, 0.3);
+	padding: 5px;
+	margin-bottom: 50px;
+}
+
+#armyOrderForm table {
+	background: none;
+	border-collapse: initial;
+	border-spacing: 15px;
+}
+
+#armySubmit {
+	display: block;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+
 
 /* Research Tab */
 #researchError {

@@ -95,7 +95,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             'asteroid_cost' => (int) $this->asteroid_cost,
             'metal' => (int) $this->metal,
             'energy' => (int) $this->energy,
-            'research' => $this->getResearchTreeArray()
+            'research' => $this->getResearchTreeArray(),
+            'ships' => $this->getShipsArray()
         ];
     }
 
@@ -267,5 +268,47 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $output;
 
+    }
+
+    public function user_ships() {
+        return $this->hasMany('OmegaGate\UserShip');
+    }
+
+    //Fetch the list of IDs we have researched
+    public function getArmy() {
+        return $this->user_ships()->lists('quantity', 'ship_id');
+    }
+
+    public function getPendingArmy() {
+        return $this->user_ships()->lists('quantity_pending', 'ship_id');
+    }
+
+    public function getShipsArray() {
+        $output = [];
+
+        $userShips = $this->getArmy()->toArray();
+        $pendingShips = $this->getPendingArmy()->toArray();
+
+        $allShips = Ship::all();
+
+        foreach ($allShips as $ship) {
+            $newItem = $ship->toArray();
+
+            if (array_key_exists($ship->id, $userShips)) {
+                $newItem['quantity'] = $userShips[$ship->id];
+            } else {
+                $newItem['quantity'] = 0;
+            }
+
+            if (array_key_exists($ship->id, $pendingShips)) {
+                $newItem['quantity_pending'] = $pendingShips[$ship->id];
+            } else {
+                $newItem['quantity_pending'] = 0;
+            }
+
+            $output[] = $newItem;
+        }
+
+        return $output;
     }
 }

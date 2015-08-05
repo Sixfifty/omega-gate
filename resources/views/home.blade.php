@@ -32,13 +32,14 @@
 			    			<td>Current Cost: <span id="powerCellCost"/></td>
 			    		</tr>
 			    		<tr>
-			    			<td colspan=3><input type="submit" id="resourceSubmit"></td>
+			    			<td colspan=3><input type='button' id="resourceSubmit" onClick="placeResourceOrder()" value='Submit'/></td>
 			    	</table>
 			    </form>
 			</div>
 		  </div>
 		  <div id="tabs-2">
-		    <p>Section to show current army and order form to order additional units.</p>
+		    <div id="armyOrderForm">
+			</div>
 		  </div>
 		  <div id="tabs-3">
 		    <p>Section to show current invasions, scan other planets (when available), and order invasions.</p>
@@ -241,18 +242,41 @@
 		    function updateUser() {
 			    $.ajax({url: '/api/user/whoami', success: function(data) {
 			    	var user = data.user,
-			    		research = user.research;
+			    		research = user.research,
+			    		ships = user.ships;
 			    	window.currentUser = user;
 
+			    	/* Populate Header and Resources */
 					updateResources();
 					$('#userPlanet').html('Planet ' + user.planet_name);
 					$('#welcome').html('Greetings, Commander ' + user.username + '!');
 			    	$('#asteroidsTotal').html(user.asteroids);
 			    	$('#powerCellsTotal').html(user.power_cells);
 
+			    	/* Populate Army */
+			    	var prerequisiteId,
+			    		state;
+			    	var armyTable = "<h4>Army Status</h4><form><table><tr><td>Unit</td><td>Quantity</td><td>Pending</td><td>Cost</td><td>Order</td></tr>";
+			    	for(var i = 0; i < ships.length; i++) {
+			    		prerequisiteId = ships[i].prerequisite_id;
+			    		state = (prerequisiteId !== null) ? research[prerequisiteId - 1].state : 1;
+
+			    		if (state === 1) {
+				    		armyTable += "<tr><td>" + ships[i].name + "</td>";
+				    		armyTable += "<td>" + ships[i].quantity + "</td>";
+				    		armyTable += "<td>" + ships[i].quantity_pending + "</td>";
+				    		armyTable += "<td>" + ships[i].metal_cost + "[M] / " + ships[i].energy_cost + "[E]</td>";
+				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "'></td></tr>";
+				    	}
+			    	}
+			    	armyTable += "<tr><td colspan=5><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
+
+			    	$('#armyOrderForm').html(armyTable);
+
+			    	/* Populate Research */
 			    	var researchClass;
 
-			    	for(var i = 0; i < user.research.length; i++) {
+			    	for(var i = 0; i < research.length; i++) {
 			    		researchClass = getResearchClass(research[i].state);
 			    		$("#research" + research[i].id).html("<span class='researchName'>" + research[i].name + "</span><p class='researchDescription'>" + research[i].description + "</p><div class='costContainer'>Time: <span class='timeCost'>" + research[i].time_cost + "</span>Metal: <span class='metalCost'>" + research[i].metal_cost + "</span>Energy: <span class='energyCost'>" + research[i].energy_cost + "</span></div><button id='researchButton" + research[i].id + "' class='researchButton' disabled onClick='beginResearch(" + research[i].id + ")'>Select</button><span class='researchPending hidden'>Researching...</span>");
 
@@ -296,7 +320,9 @@
 		    	return researchCls;
 		    }
 
-		    function placeOrder(asteroids, powerCells) {
+		    function placeResourceOrder() {
+		    	var asteroids = $('#asteroidOrder').val(),
+		    		powerCells = $('#powerCellOrder').val();
 	    		$.ajax({
 	    			method: "POST",
 	    			url: '/api/user/order/place',
@@ -308,13 +334,47 @@
 	    				powercells: powerCells
 	    			},
 	    			success: function(data) {
-	    				console.log('derp');
 	    				console.log(data);
 	    			}
 	    		});
 		    }
+		    window.placeResourceOrder = placeResourceOrder;
 
-		    window.placeOrder = placeOrder;
+		    function placeArmyOrder() {
+		    	var order = [],
+		    		shipId,
+		    		quantity;
+
+		    	//For each input field in the order table
+		    	$('#armyOrderForm').find('.armyOrderField').each(function () {
+		    		//Strip text from id
+		    		shipId = $(this).attr('id').replace('armyField', '');
+		    		quantity = $(this).val();
+
+		    		if (quantity > 0) {
+		    			order[shipId] = quantity;
+		    		}
+		    	});
+
+		    	console.log(order);
+
+		    	if (order.length > 0) {
+			    	$.ajax({
+		    			method: "POST",
+		    			url: '/api/user/armyOrder/place',
+		    			headers: {
+		    				'X-CSRF-TOKEN': $('#token').attr('value')
+		    			},
+		    			data: {
+		    				order
+		    			},
+		    			success: function(data) {
+		    				console.log(data);
+		    			}
+		    		});
+			    }
+		    }
+		    window.placeArmyOrder = placeArmyOrder;
 
 		    function beginResearch(researchId) {
 		    	$("#researchError").hide();
@@ -343,7 +403,6 @@
 	    			$("#researchError").show();
 	    		}
 		    }
-
 		    window.beginResearch = beginResearch;
 
 		    
