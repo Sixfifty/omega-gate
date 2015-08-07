@@ -137,6 +137,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function orderShips(Ship $ship, $quantity = 1) {
 
+        $multiplier = 1;
+        if($this->hasResearched(16)) $multiplier = 0.9;
+
+        $metalCost = $ship->metal_cost * $multiplier;
+        $energyCost = $ship->energy_cost * $multiplier;
+
         //Find the ship entry for this user
         $userShip = $this->user_ships()->where('ship_id', $ship->id)->first();
 
@@ -153,8 +159,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         while(
                 ($quantity > 0) && 
-                ($this->metal >= $ship->metal_cost) &&
-                ($this->energy >= $ship->energy_cost) 
+                ($this->metal >= $metalCost) &&
+                ($this->energy >= $energyCost) 
             ) {
             $this->metal -= $ship->metal_cost;
             $this->energy -= $ship->energy_cost;
