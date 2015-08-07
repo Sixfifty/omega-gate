@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use OmegaGate\Http\Requests;
 use OmegaGate\Http\Controllers\Controller;
 use OmegaGate\Research;
+use OmegaGate\Ship;
 
 class UserController extends ApiController
 {
@@ -39,6 +40,28 @@ class UserController extends ApiController
         $user->orderPowerCells($powercells);
 
         $user->save();
+
+        return $this->respond([
+            'user' => $user,
+        ]);
+
+    }
+
+
+    public function placeArmyOrder() {
+        $orders = json_decode(\Input::get('orders'));
+        
+        $user = \Auth::user();
+
+        foreach($orders as $order) {
+            $ship = Ship::find($order->ship_id);
+            if($ship) {
+                $user->orderShips($ship, $order->quantity);
+            }
+            
+        }
+
+        //$user->save();
 
         return $this->respond([
             'user' => $user,

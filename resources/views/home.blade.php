@@ -266,7 +266,7 @@
 				    		armyTable += "<td>" + ships[i].quantity + "</td>";
 				    		armyTable += "<td>" + ships[i].quantity_pending + "</td>";
 				    		armyTable += "<td>" + ships[i].metal_cost + "[M] / " + ships[i].energy_cost + "[E]</td>";
-				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "'></td></tr>";
+				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "'' shipid='" + ships[i].id + "'></td></tr>";
 				    	}
 			    	}
 			    	armyTable += "<tr><td colspan=5><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
@@ -325,7 +325,7 @@
 		    		powerCells = $('#powerCellOrder').val();
 	    		$.ajax({
 	    			method: "POST",
-	    			url: '/api/user/order/place',
+	    			url: '/api/user/resource/order',
 	    			headers: {
 	    				'X-CSRF-TOKEN': $('#token').attr('value')
 	    			},
@@ -341,32 +341,37 @@
 		    window.placeResourceOrder = placeResourceOrder;
 
 		    function placeArmyOrder() {
-		    	var order = [],
+		    	var orders = [],
 		    		shipId,
 		    		quantity;
 
-		    	//For each input field in the order table
+		    	//For each input field in the orders table
 		    	$('#armyOrderForm').find('.armyOrderField').each(function () {
 		    		//Strip text from id
-		    		shipId = $(this).attr('id').replace('armyField', '');
+		    		shipId = $(this).attr('shipid');
 		    		quantity = $(this).val();
 
+		    		console.log(shipId);
+
 		    		if (quantity > 0) {
-		    			order[shipId] = quantity;
+		    			orders.push({
+		    				ship_id: shipId,
+		    				quantity: quantity,
+		    			});
 		    		}
 		    	});
 
-		    	console.log(order);
+		    	console.log(orders);
 
-		    	if (order.length > 0) {
+		    	if (orders.length > 0) {
 			    	$.ajax({
 		    			method: "POST",
-		    			url: '/api/user/armyOrder/place',
+		    			url: '/api/user/army/order',
 		    			headers: {
 		    				'X-CSRF-TOKEN': $('#token').attr('value')
 		    			},
 		    			data: {
-		    				order
+		    				orders: JSON.stringify(orders)
 		    			},
 		    			success: function(data) {
 		    				console.log(data);

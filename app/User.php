@@ -82,6 +82,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('OmegaGate\UserResearch');
     }
 
+    public function user_ships() {
+        return $this->hasMany('OmegaGate\UserShip');
+    }
+
     public function toArray() {
         return [
             'id' => (int) $this->id,
@@ -102,7 +106,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function orderAsteroids($asteroidsOrdered) {
 
-        while($asteroidsOrdered > 0) {
+        while($asteroidsOrdered > 0 && $this->metal >= $this->asteroid_cost) {
             $this->metal -= $this->asteroid_cost;
             $this->asteroids_pending++;
             $asteroidsOrdered--;
@@ -114,13 +118,55 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function orderPowerCells($powerCellsOrdered) {
 
-        while($powerCellsOrdered > 0) {
+        //Order power cells up to their request or until they can't afford to
+        while($powerCellsOrdered > 0 && $this->energy >= $this->power_cell_cost) {
             $this->energy -= $this->power_cell_cost;
             $this->power_cells_pending++;
             $powerCellsOrdered--;
         }
 
         return $this->power_cells_pending;
+
+    }
+
+    public function canOrderShip(Ship $ship) {
+        if(empty($ship->prerequisite_id)) return true;
+
+        return $this->hasResearched($ship->prerequisite_id);
+    }
+
+    public function orderShips(Ship $ship, $quantity = 1) {
+
+        //Find the ship entry for this user
+        $userShip = $this->user_ships()->where('ship_id', $ship->id)->first();
+
+        //No user ship relation, lets make one
+        if(!$userShip) {
+            $userShip = new UserShip();
+            $userShip->user_id = $this->id;
+            $userShip->ship_id = $ship->id;
+        }
+
+        if(!$this->canOrderShip($ship)) 
+            return false;
+
+
+        while(
+                ($quantity > 0) && 
+                ($this->metal >= $ship->metal_cost) &&
+                ($this->energy >= $ship->energy_cost) 
+            ) {
+            $this->metal -= $ship->metal_cost;
+            $this->energy -= $ship->energy_cost;
+            $userShip->quantity_pending++;
+            $quantity--;
+        }
+
+        $userShip->save();
+        $this->save(); //Need to save this here, so people don't get free ships
+
+        return true;
+        
 
     }
 
@@ -268,10 +314,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $output;
 
-    }
-
-    public function user_ships() {
-        return $this->hasMany('OmegaGate\UserShip');
     }
 
     //Fetch the list of IDs we have researched
