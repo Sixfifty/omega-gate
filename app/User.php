@@ -188,6 +188,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
+    /**
+     * Convert pending ships to real ships.
+     */
+    public function deliverShips() {
+
+        foreach($this->user_ships as $userShip) {
+            $userShip->deliverShips();
+            $userShip->save();
+        }
+        $this->power_cells += $this->power_cells_pending;
+        $this->power_cells_pending = 0;
+
+    }
+
+
     public function tickMetal() {
         $multiplier = 1;
         if($this->hasResearched(2)) $multiplier = 1.5;

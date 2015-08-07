@@ -38,11 +38,12 @@ class Tick extends Command
     public function handle()
     {
         //Tick individual user actions
-        $users = \OmegaGate\User::with('user_research')->get();
+        $users = \OmegaGate\User::with(['user_research', 'user_ships'])->get();
         foreach($users as $user) {
             echo $user->username . "\n";
             $user->deliverAsteroids();
             $user->deliverPowerCells();
+            $user->deliverShips();
             $user->tickResources();
             $user->save();
         }
