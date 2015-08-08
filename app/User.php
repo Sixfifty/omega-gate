@@ -119,8 +119,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function orderPowerCells($powerCellsOrdered) {
 
         //Order power cells up to their request or until they can't afford to
-        while($powerCellsOrdered > 0 && $this->energy >= $this->power_cell_cost) {
-            $this->energy -= $this->power_cell_cost;
+        while($powerCellsOrdered > 0 && $this->metal >= $this->power_cell_cost) {
+            $this->metal -= $this->power_cell_cost;
             $this->power_cells_pending++;
             $powerCellsOrdered--;
         }
