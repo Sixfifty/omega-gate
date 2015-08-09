@@ -105,6 +105,8 @@ class UserController extends ApiController
     public function formAttack() {
         $user = \Auth::user();
         $attackInput = json_decode(\Input::get('attack'));
+
+        
         // --- should be formed like this ---
         // {
         //     target_id: 2,
@@ -142,7 +144,7 @@ class UserController extends ApiController
             if($ship->speed > $attack->ticks_remaining) $attack->ticks_remaining = $ship->speed;
 
             $attackShip = new AttackShip();
-            $attackShip->ship_id = $ship->ship_id;
+            $attackShip->ship_id = $ship->id;
             $attackShip->attack_id = $attack->id;
             $attackShip->quantity = $newAttackShip->quantity;
             $attackShip->save();
@@ -152,8 +154,8 @@ class UserController extends ApiController
         }
 
         //Subtract ticks from research
-        if($user->hasResesearched(24)) $attack->ticks_remaining--;
-        if($user->hasResesearched(26)) $attack->ticks_remaining--;
+        if($user->hasResearched(24)) $attack->ticks_remaining--;
+        if($user->hasResearched(26)) $attack->ticks_remaining--;
 
         //Set a sensible minimum for attack ticks
         if ($attack->ticks_remaining < 2) $attack->ticks_remaining = 2;
@@ -161,7 +163,7 @@ class UserController extends ApiController
         //Finally, save the attack... again
         $attack->save();
 
-        $this->respond([
+        return $this->respond([
             'user' => $user,
             'attack' => $attack,
             'attackShips' => $attackShips,
