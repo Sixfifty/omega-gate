@@ -55,6 +55,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         parent::boot();
     }
 
+    public static function AllPlanets() {
+        $rawPlanets = self::lists('planet_name','id');
+        $jsonPlanets = [];
+
+        foreach($rawPlanets as $id => $name) {
+            $jsonPlanets[] = [
+                'id' => $id,
+                'name' => $name
+            ];
+        }
+
+        return $jsonPlanets;
+    }
+
     /**
      * Get the current asteroid cost for this user
      */

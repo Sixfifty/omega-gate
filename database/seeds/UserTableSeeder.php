@@ -18,5 +18,11 @@ class UserTableSeeder extends Seeder
         	'username' => 'evilthecat',
         	'password' => bcrypt('minor-setback'),
     	]);
+
+        User::create([
+            'planet_name' => 'La Planeta De Aqua',
+            'username' => 'BobTheKillerGoldfish',
+            'password' => bcrypt('darn-soda-pop'),
+        ]);
     }
 }

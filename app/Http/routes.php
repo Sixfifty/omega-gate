@@ -38,4 +38,5 @@ Route::group([
 	Route::post('user/resource/order', ['uses' => 'UserController@placeResourceOrder', 'as' => 'user.order.place']);
 	Route::post('user/army/order', ['uses' => 'UserController@placeArmyOrder', 'as' => 'user.order.place']);
 	Route::post('user/research/begin', ['uses' => 'UserController@beginResearch', 'as' => 'user.research.begin']);
+	Route::post('user/attack/create', ['uses' => 'UserController@formAttack', 'as' => 'user.attack.create']);
 });

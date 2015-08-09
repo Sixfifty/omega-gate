@@ -410,6 +410,39 @@
 		    }
 		    window.beginResearch = beginResearch;
 
+		    function formAttack() {
+
+		    	var attack = {
+		            target_id: 2,
+		            ships: [
+		            	{
+			                ship_id: 1,
+			                quantity: 3
+		                },
+		                {
+			                ship_id: 2,
+			                quantity: 4
+		                },
+		            ]
+		        };
+
+		    	$.ajax({
+		    			method: "POST",
+		    			url: '/api/user/attack/create',
+		    			headers: {
+		    				'X-CSRF-TOKEN': $('#token').attr('value')
+		    			},
+		    			data: {
+		    				attack: JSON.stringify(attack)
+		    			},
+		    			success: function(data) {
+		    				console.log(data)
+		    			}
+		    		});
+		    }
+
+		    window.formAttack = formAttack;
+
 		    
 
 		    updateUser();
