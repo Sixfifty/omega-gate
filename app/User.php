@@ -86,6 +86,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('OmegaGate\UserShip');
     }
 
+    public function attacks() {
+        return $this->hasMany('OmegaGate\Attack');
+    }
+
     public function toArray() {
         return [
             'id' => (int) $this->id,
@@ -213,7 +217,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $multiplier = 1;
         if($this->hasResearched(2)) $multiplier = 1.5;
         if($this->hasResearched(8)) $multiplier = 2;
-        $this->metal += (self::TICK_METAL * $multiplier);
+        $this->metal += ((self::TICK_METAL * $this->asteroids) * $multiplier);
 
     }
 
@@ -222,7 +226,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($this->hasResearched(3)) $multiplier = 1.5;
         if($this->hasResearched(7)) $multiplier = 2;
 
-        $this->energy += (self::TICK_ENERGY * $multiplier);
+        $this->energy += ((self::TICK_ENERGY *  $this->power_cells) * $multiplier);
     }
 
     public function tickResources() {

@@ -33,6 +33,7 @@ Route::group([
     'middleware' => 'auth'
     ], function() {
 
+    Route::get('planets/list', ['uses' => 'UserController@allPlanets', 'as' => 'planet.list']);
 	Route::get('user/whoami', ['uses' => 'UserController@whoAmI', 'as' => 'user.whoami']);
 	Route::post('user/resource/order', ['uses' => 'UserController@placeResourceOrder', 'as' => 'user.order.place']);
 	Route::post('user/army/order', ['uses' => 'UserController@placeArmyOrder', 'as' => 'user.order.place']);

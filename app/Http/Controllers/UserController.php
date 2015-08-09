@@ -8,6 +8,7 @@ use OmegaGate\Http\Requests;
 use OmegaGate\Http\Controllers\Controller;
 use OmegaGate\Research;
 use OmegaGate\Ship;
+use OmegaGate\User;
 
 class UserController extends ApiController
 {
@@ -27,8 +28,15 @@ class UserController extends ApiController
 
         return $this->respond([
             'user' => $user,
+            'planets' => User::lists('planet_name','id'),
         ]);
         
+    }
+
+    public function allPlanets() {
+        return $this->respond([
+            'planets' => User::lists('planet_name','id'),
+        ]);
     }
 
     public function placeResourceOrder() {
