@@ -101,7 +101,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function attacks() {
-        return $this->hasMany('OmegaGate\Attack');
+        return $this->hasMany('OmegaGate\Attack', 'source_id');
+    }
+
+    public function defending_attacks() {
+        return $this->hasMany('OmegaGate\Attack', 'target_id');
     }
 
     public function toArray() {
@@ -118,7 +122,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             'metal' => (int) $this->metal,
             'energy' => (int) $this->energy,
             'research' => $this->getResearchTreeArray(),
-            'ships' => $this->getShipsArray()
+            'ships' => $this->getShipsArray(),
+            'attacks' => $this->attacks,
+            'defending_attacks' => $this->defending_attacks
         ];
     }
 
