@@ -1,4 +1,8 @@
 
+body {
+	background-image: url("animatedStars.gif");
+}
+
 .hidden {
 	display: none;
 }
