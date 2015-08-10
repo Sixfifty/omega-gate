@@ -39,6 +39,7 @@
 				</ul>
 
 			</div>
+			<div id="attackWarning" hidden></div>
 		</nav>
 
 		@yield('content')

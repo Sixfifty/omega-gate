@@ -15,8 +15,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     CONST 
         ASTEROID_COST = 200,
         POWERCELL_COST = 200,
-        TICK_ENERGY = 1000,
-        TICK_METAL = 1000;
+        TICK_ENERGY = 200,
+        TICK_METAL = 200;
 
 
     /**

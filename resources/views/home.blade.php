@@ -268,6 +268,20 @@
 			    	$('#asteroidsTotal').html(user.asteroids);
 			    	$('#powerCellsTotal').html(user.power_cells);
 
+			    	if (user.defending_attacks.length > 0) {
+			    		var defendingAttacks = user.defending_attacks,
+			    			shortestAttack = defendingAttacks[0].ticks_remaining;
+
+			    		for (var i = 0; i < defendingAttacks.length; i++) {
+			    			if (defendingAttacks[i].ticks_remaining < shortestAttack) {
+			    				shortestAttack = defendingAttacks[i].ticks_remaining;
+			    			}
+			    		}
+			    		var warningHtml = "<p><span class='ui-icon ui-icon-alert'></span><strong>WARNING:</strong> You are under attack from " + defendingAttacks.length + " planet(s)! Earliest attack will arrive in <strong>" + shortestAttack + " ticks!</strong></p>";
+			    		$("#attackWarning").html(warningHtml);
+			    		$("#attackWarning").show();
+			    	}
+
 			    	/* Populate Army */
 			    	var prerequisiteId,
 			    		state;
@@ -315,22 +329,26 @@
 					$('#scanInner').html(scanHtml);
 
 					if(checkResearch(14)) {
-						var stealth;
-						invasionHtml = selectHtml;
-						invasionHtml += "<form><table><tr><td>Unit</td><td>Stealth</td><td>Att</td><td>HP</td><td>Speed</td><td>Quantity</td><td>Send</td></tr>";
-						for(var i = 0; i < ships.length; i++) {
-				    		if (ships[i].quantity > 0) {
-				    			stealth = (ships[i].stealth === "1") ? "Yes" : "No";
-					    		invasionHtml += "<tr><td>" + ships[i].name + "</td>";
-					    		invasionHtml += "<td>" + stealth + "</td>";
-					    		invasionHtml += "<td>" + ships[i].attack + "</td>";
-					    		invasionHtml += "<td>" + ships[i].hp + "</td>";
-					    		invasionHtml += "<td>" + ships[i].speed + "</td>";
-					    		invasionHtml += "<td>" + ships[i].quantity + "</td>";
-					    		invasionHtml += "<td><input type='number' class='invasionOrderField' id='invasionField" + ships[i].id + "' shipid='" + ships[i].id + "'></td></tr>";
+						if (user.attacks.length > 0) {
+							invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently attacking. ETA: " + user.attacks[0].ticks_remaining + " ticks.</p></div>";
+						} else {
+							var stealth;
+							invasionHtml = selectHtml;
+							invasionHtml += "<form><table><tr><td>Unit</td><td>Stealth</td><td>Att</td><td>HP</td><td>Speed</td><td>Quantity</td><td>Send</td></tr>";
+							for(var i = 0; i < ships.length; i++) {
+					    		if (ships[i].quantity > 0) {
+					    			stealth = (ships[i].stealth === "1") ? "Yes" : "No";
+						    		invasionHtml += "<tr><td>" + ships[i].name + "</td>";
+						    		invasionHtml += "<td>" + stealth + "</td>";
+						    		invasionHtml += "<td>" + ships[i].attack + "</td>";
+						    		invasionHtml += "<td>" + ships[i].hp + "</td>";
+						    		invasionHtml += "<td>" + ships[i].speed + "</td>";
+						    		invasionHtml += "<td>" + ships[i].quantity + "</td>";
+						    		invasionHtml += "<td><input type='number' class='invasionOrderField' id='invasionField" + ships[i].id + "' shipid='" + ships[i].id + "'></td></tr>";
+						    	}
 					    	}
-				    	}
-				    	invasionHtml += "<tr><td colspan=7><input type='button' id='invasionSubmit' onClick='formAttack()' value='Submit'/></td></tr></table></form>";	
+					    	invasionHtml += "<tr><td colspan=7><input type='button' id='invasionSubmit' onClick='formAttack()' value='Submit'/></td></tr></table></form>";	
+					    }
 					} else {
 						invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Warp Travel to unlock this feature.</p></div>";
 					}
@@ -442,7 +460,7 @@
 		    			data: {
 		    				orders: JSON.stringify(orders)
 		    			},
-		    			success: function(data) {
+		    			success: function(data) {		    				
 		    				console.log(data);
 		    			}
 		    		});
@@ -516,7 +534,12 @@
 		    				attack: JSON.stringify(attack)
 		    			},
 		    			success: function(data) {
-		    				console.log(data)
+		    				if (data.attack) {
+		    					$("#invasionInner").empty();
+
+		    					var progressHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently attacking. ETA: " + data.attack.ticks_remaining + " ticks.</p></div>";
+		    					$("#invasionInner").html(progressHtml);
+		    				}
 		    			}
 		    		});
 		    	}
