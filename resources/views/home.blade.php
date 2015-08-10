@@ -42,7 +42,21 @@
 			</div>
 		  </div>
 		  <div id="tabs-3">
-		    <p>Section to show current invasions, scan other planets (when available), and order invasions.</p>
+		  	<div id="conquerContainer">
+			    <div id='scanContainer'>
+			    	<h4>Planetary Scanning</h4>
+			    	<div id='scanInner'></div>
+			    </div>
+			    <div id='invasionContainer'>
+			    	<h4>Invasion</h4>
+			    	<div id='invasionInner'></div>
+			    </div>
+
+			    <div id='invasionHistoryContainer'>
+			    	<h4>Defence Log</h4>
+			    	<div id='defenceInner'></div>
+			    </div>
+			</div>
 		  </div>
 		  <div id="tabs-4">
 		    <p>Start a research to improve resources, add scans and create new types of ships!</p>
@@ -50,6 +64,7 @@
 		    	<p>
 		    		<span class="ui-icon ui-icon-alert"></span> 
 		    		<strong>Alert:</strong>You cannot afford that research!
+		    	</p>
 		    </div>
 
 		    <div id="research1" class="researchBox"></div>
@@ -230,7 +245,7 @@
     <script>
     	var RESEARCH_COMPLETE = "researchComplete",
     		RESEARCH_AVAILABLE = "researchAvailable",
-    		RESEARCH_IN_PROG = "researchInProg";
+    		RESEARCH_IN_PROG = "researchInProg";    	
 
 		$(function() {
 		    $("#tabs").tabs();
@@ -273,6 +288,58 @@
 
 			    	$('#armyOrderForm').html(armyTable);
 
+
+			    	/****** Update order form!!  ******/
+					/*$('#asteroidOrder').on('input', function() {
+					    //alert("changed");
+
+					});*/
+
+
+					/* Populate Conquer	*/
+					var scanHtml,
+						invasionHtml,
+						selectHtml = "<table><tr><td>Select Planet:</td><td><select class='selectMenu'>";
+						for (var i = 0; i < data.planets.length; i++) {
+							if (data.planets[i].id !== user.id) {
+								selectHtml += "<option value=" + data.planets[i].id + ">" + data.planets[i].name + "</option>";
+							}
+						}
+						selectHtml += "</select></td></table>";
+
+					if(checkResearch(10)) {
+						scanHtml = selectHtml;
+					} else {
+						scanHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Scanning to unlock this feature.</p></div>";
+					}
+					$('#scanInner').html(scanHtml);
+
+					if(checkResearch(14)) {
+						var stealth;
+						invasionHtml = selectHtml;
+						invasionHtml += "<form><table><tr><td>Unit</td><td>Stealth</td><td>Att</td><td>HP</td><td>Speed</td><td>Quantity</td><td>Send</td></tr>";
+						for(var i = 0; i < ships.length; i++) {
+				    		if (ships[i].quantity > 0) {
+				    			stealth = (ships[i].stealth === "1") ? "Yes" : "No";
+					    		invasionHtml += "<tr><td>" + ships[i].name + "</td>";
+					    		invasionHtml += "<td>" + stealth + "</td>";
+					    		invasionHtml += "<td>" + ships[i].attack + "</td>";
+					    		invasionHtml += "<td>" + ships[i].hp + "</td>";
+					    		invasionHtml += "<td>" + ships[i].speed + "</td>";
+					    		invasionHtml += "<td>" + ships[i].quantity + "</td>";
+					    		invasionHtml += "<td><input type='number' class='invasionOrderField' id='invasionField" + ships[i].id + "' shipid='" + ships[i].id + "'></td></tr>";
+					    	}
+				    	}
+				    	invasionHtml += "<tr><td colspan=7><input type='button' id='invasionSubmit' onClick='formAttack()' value='Submit'/></td></tr></table></form>";	
+					} else {
+						invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Warp Travel to unlock this feature.</p></div>";
+					}
+					$('#invasionInner').html(invasionHtml);
+
+					$('.selectMenu').selectmenu();
+
+
+
 			    	/* Populate Research */
 			    	var researchClass;
 
@@ -299,6 +366,8 @@
 		    	$('#userMetal').html('Metal: ' + window.currentUser.metal);
 				$('#userEnergy').html('Energy: ' + window.currentUser.energy);
 		    }
+
+		   
 
 		    function getResearchClass(state) {
 		    	var researchCls;
@@ -411,22 +480,33 @@
 		    window.beginResearch = beginResearch;
 
 		    function formAttack() {
+		    	var shipsList = [],
+		    		targetId,
+		    		attack;
 
-		    	var attack = {
-		            target_id: 2,
-		            ships: [
-		            	{
-			                ship_id: 1,
-			                quantity: 3
-		                },
-		                {
-			                ship_id: 2,
-			                quantity: 4
-		                },
-		            ]
-		        };
+		    	//For each input field in the attack table
+		    	$('#invasionInner').find('.invasionOrderField').each(function () {
+		    		//Strip text from id
+		    		shipId = $(this).attr('shipid');
+		    		quantity = $(this).val();
 
-		    	$.ajax({
+		    		if (quantity > 0) {
+		    			shipsList.push({
+		    				ship_id: shipId,
+		    				quantity: quantity,
+		    			});
+		    		}
+		    	});
+
+		    	if (shipsList.length > 0) {
+		    		targetId = $("#invasionInner").find(".selectMenu").val();
+
+		    		attack = {
+		    			target_id: targetId,
+		    			ships: shipsList
+		    		}
+
+		    		$.ajax({
 		    			method: "POST",
 		    			url: '/api/user/attack/create',
 		    			headers: {
@@ -439,11 +519,24 @@
 		    				console.log(data)
 		    			}
 		    		});
+		    	}
 		    }
-
 		    window.formAttack = formAttack;
 
 		    
+		    function checkResearch(researchId) {
+		    	var research = window.currentUser.research,
+		    		result = false;
+
+		    	for (var i = 0; i < research.length; i++) {
+		    		if(research[i].id === researchId) {
+		    			result = (research[i].state === 1) ? true : false;
+		    			break;
+		    		}
+		    	}
+
+		    	return result;
+		    }
 
 		    updateUser();
 		});

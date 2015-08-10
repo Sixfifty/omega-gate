@@ -64,6 +64,44 @@
 }
 
 
+/* Conquer Tab */
+#conquerContainer table {
+	background: none;
+	border-collapse: initial;
+	border-spacing: 15px;
+}
+
+#invasionSubmit {
+	display: block;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+#scanContainer, #invasionContainer, #invasionHistoryContainer {
+	border: 1px solid #ff7373;
+	border-radius: 5px;
+	background-color:rgba(200, 50, 50, 0.3);
+	padding: 5px;
+	margin-bottom: 50px;
+	min-height: 100px;
+}
+
+#scanContainer .ui-icon-locked, #invasionContainer .ui-icon-locked {
+	float:left;
+	margin-right: 5px;
+}
+
+.featureLock {
+	font-size: 12px;
+	width: 350px;
+	margin: 0 auto;
+}
+
+.ui-selectmenu-button {
+	width: initial !important;
+	margin-left: 10px;
+}
+
 
 /* Research Tab */
 #researchError {
