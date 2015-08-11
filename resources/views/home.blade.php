@@ -315,7 +315,7 @@
 				    		armyTable += "<td>" + ships[i].quantity + "</td>";
 				    		armyTable += "<td>" + ships[i].quantity_pending + "</td>";
 				    		armyTable += "<td>" + ships[i].metal_cost + "[M] / " + ships[i].energy_cost + "[E]</td>";
-				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "'' shipid='" + ships[i].id + "'></td></tr>";
+				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "' shipid='" + ships[i].id + "' min='0'></td></tr>";
 				    	}
 			    	}
 			    	armyTable += "<tr><td colspan=5><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
@@ -364,7 +364,7 @@
 						    		invasionHtml += "<td>" + ships[i].hp + "</td>";
 						    		invasionHtml += "<td>" + ships[i].speed + "</td>";
 						    		invasionHtml += "<td>" + ships[i].quantity + "</td>";
-						    		invasionHtml += "<td><input type='number' class='invasionOrderField' id='invasionField" + ships[i].id + "' shipid='" + ships[i].id + "'></td></tr>";
+						    		invasionHtml += "<td><input type='number' class='invasionOrderField' id='invasionField" + ships[i].id + "' shipid='" + ships[i].id + "' min='0'></td></tr>";
 						    	}
 					    	}
 					    	invasionHtml += "<tr><td colspan=7><input type='button' id='invasionSubmit' onClick='formAttack()' value='Submit'/></td></tr></table></form>";	

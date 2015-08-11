@@ -195,8 +195,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ($this->metal >= $metalCost) &&
                 ($this->energy >= $energyCost) 
             ) {
-            $this->metal -= $ship->metal_cost;
-            $this->energy -= $ship->energy_cost;
+            $this->metal -= $metalCost;
+            $this->energy -= $energyCost;
             $userShip->quantity_pending++;
             $quantity--;
         }
@@ -396,6 +396,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         foreach ($allShips as $ship) {
             $newItem = $ship->toArray();
+
+            if ($this->hasResearched(16)) {
+                $newItem['metal_cost'] = ($newItem['metal_cost'] * 0.9);
+                $newItem['energy_cost'] = ($newItem['energy_cost'] * 0.9);
+            }
 
             if (array_key_exists($ship->id, $userShips)) {
                 $newItem['quantity'] = $userShips[$ship->id];
