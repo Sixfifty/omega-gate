@@ -127,7 +127,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             'asteroids_pending' => (int) $this->asteroids_pending,
             'asteroid_cost' => (int) $this->asteroid_cost,
             'metal' => (int) $this->metal,
+            'metal_yield' => (int) $this->calculateMetalYield(),
             'energy' => (int) $this->energy,
+            'energy_yield' => (int) $this->calculateEnergyYield(),
             'research' => $this->getResearchTreeArray(),
             'ships' => $this->getShipsArray(),
             'attacks' => $this->attacks,
@@ -239,21 +241,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
-
-    public function tickMetal() {
+    public function calculateMetalYield() {
         $multiplier = 1;
         if($this->hasResearched(2)) $multiplier = 1.5;
         if($this->hasResearched(8)) $multiplier = 2;
-        $this->metal += ((self::TICK_METAL * $this->asteroids) * $multiplier);
-
+        $yield = ((self::TICK_METAL * $this->asteroids) * $multiplier);
+        return $yield;
     }
 
-    public function tickEnergy() {
+    public function calculateEnergyYield() {
         $multiplier = 1;
         if($this->hasResearched(3)) $multiplier = 1.5;
         if($this->hasResearched(7)) $multiplier = 2;
+        $yield = ((self::TICK_ENERGY *  $this->power_cells) * $multiplier);
+        return $yield;
+    }
 
-        $this->energy += ((self::TICK_ENERGY *  $this->power_cells) * $multiplier);
+    public function tickMetal() {
+        $this->metal += $this->calculateMetalYield();
+    }
+
+    public function tickEnergy() {
+        $this->energy += $this->calculateEnergyYield();
     }
 
     public function tickResources() {

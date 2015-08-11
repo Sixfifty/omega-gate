@@ -11,55 +11,46 @@
 		    <li><a href="#tabs-4">Research</a></li>
 		  </ul>
 		  <div id="tabs-1">
-		  	<!--<div id="currentResourceContainer">
-			  	<h4>Current Resources:</h4>
-			    <div>Asteroids: <span id="asteroidsTotal"></span></div>
-			    <div>Power Cells: <span id="powerCellsTotal"></span></div>
-			</div>-->
-
+		  	<div id="resourceError" class='ui-state-error ui-corner-all' hidden>
+		    	<p>
+		    		<span class="ui-icon ui-icon-alert"></span> 
+		    		<strong>Alert:</strong>You cannot afford that resource!
+		    	</p>
+		    </div>
 		    <div id="resourceOrderForm">
-		    	<!--<h4>[Order Form]</h4>
-			    <form>
-			    	<table>
-			    		<tr>
-			    			<td>Asteroids:</td>
-			    			<td><input type="number" id="asteroidOrder"></td> 
-			    			<td>Current Cost: <span id="asteroidCost"/></td>
-			    		</tr>
-			    		<tr>
-			    			<td>Power Cells:</td>
-			    			<td><input type="number" id="powerCellOrder"></td>
-			    			<td>Current Cost: <span id="powerCellCost"/></td>
-			    		</tr>
-			    		<tr>
-			    			<td colspan=3><input type='button' id="resourceSubmit" onClick="placeResourceOrder()" value='Submit'/></td>
-			    	</table>
-			    </form>-->
 			    <h4>Current Resources:</h4>
 			    <table>
 			    	<tr>
 			    		<td></td>
 			    		<td>Quantity</td>
+			    		<td>Pending</td>
 			    		<td>Yield</td>
 			    		<td>Cost</td>
-			    		<td>Order</td>
+			    		<td></td>
 			    	</tr>
 			    	<tr>
 			    		<td>Asteroid</td>
 			    		<td><span id="asteroidTotal"></span></td>
+			    		<td><span id="asteroidPending"></span></td>
 			    		<td><span id="asteroidYield"></span></td>
 			    		<td><span id="asteroidCost"></span></td>
 			    		<td><input type='button' id="resourceSubmit" onClick="placeResourceOrder(1,0)" value='Buy Asteroid'/></td>
 			    	</tr>
-			    	<tr>
+			    	<tr id="powerCellFull" hidden>
 			    		<td>Power Cell</td>
 			    		<td><span id="powercellTotal"></span></td>
+			    		<td><span id="powercellPending"></span></td>
 			    		<td><span id="powercellYield"></span></td>
 			    		<td><span id="powercellCost"></span></td>
 			    		<td><input type='button' id="resourceSubmit" onClick="placeResourceOrder(0,1)" value='Buy Power Cell'/></td>
 			    	</tr>
+			    	<tr id="powerCellLock">
+			    		<td>Power Cell</td>
+			    		<td colspan="5">
+			    			<div class='solarLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Solar Power Station to unlock this feature.</p></div>
+			    		</td>
+			    	</tr>
 			    </table>
-
 			</div>
 		  </div>
 		  <div id="tabs-2">
@@ -305,13 +296,11 @@
 			    	}
 
 			    	/* Populate Resources */
-			    	$('#asteroidTotal').html(user.asteroids);
-			    	$('#powercellTotal').html(user.power_cells);
-			    	//Add Asteroid Yield
-			    	//Add Power Cell Yield
-			    	$('#asteroidCost').html(user.asteroid_cost);
-			    	$('#powercellCost').html(user.power_cell_cost);
-
+			    	if (checkResearch(1)) {
+			    		$("#powerCellLock").hide();
+			    		$("#powerCellFull").show();
+			    	}
+			    	updateResourceTable();
 
 			    	/* Populate Army */
 			    	var prerequisiteId,
@@ -330,11 +319,11 @@
 				    	}
 			    	}
 			    	armyTable += "<tr><td colspan=5><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
-
 			    	$('#armyOrderForm').html(armyTable);
 
 
 			    	/****** Update order form!!  ******/
+			    	//Example
 					/*$('#asteroidOrder').on('input', function() {
 					    //alert("changed");
 
@@ -416,7 +405,30 @@
 				$('#userEnergy').html('Energy: ' + window.currentUser.energy);
 		    }
 
-		   
+		    function updateResourceTable() {
+		    	$('#asteroidTotal').html(window.currentUser.asteroids);
+		    	$('#powercellTotal').html(window.currentUser.power_cells);
+		    	$('#asteroidPending').html(window.currentUser.asteroids_pending);
+		    	$('#powercellPending').html(window.currentUser.power_cells_pending);
+		    	$('#asteroidYield').html(window.currentUser.metal_yield + "[M] per tick");
+		    	$('#powercellYield').html(window.currentUser.energy_yield + "[E] per tick");
+		    	$('#asteroidCost').html(window.currentUser.asteroid_cost + "[M]");
+		    	$('#powercellCost').html(window.currentUser.power_cell_cost + "[M]");
+		    }
+
+		   function checkResearch(researchId) {
+		    	var research = window.currentUser.research,
+		    		result = false;
+
+		    	for (var i = 0; i < research.length; i++) {
+		    		if(research[i].id === researchId) {
+		    			result = (research[i].state === 1) ? true : false;
+		    			break;
+		    		}
+		    	}
+
+		    	return result;
+		    }
 
 		    function getResearchClass(state) {
 		    	var researchCls;
@@ -439,22 +451,37 @@
 		    }
 
 		    function placeResourceOrder(asteroid, powercell) {
-		    	//Check User can afford this first!!!
+		    	$("#resourceError").hide();
 
-	    		$.ajax({
-	    			method: "POST",
-	    			url: '/api/user/resource/order',
-	    			headers: {
-	    				'X-CSRF-TOKEN': $('#token').attr('value')
-	    			},
-	    			data: {
-	    				asteroids: asteroid,
-	    				powercells: powercell
-	    			},
-	    			success: function(data) {
-	    				console.log(data);
-	    			}
-	    		});
+		    	var affordable = false;
+		    	if (asteroid && window.currentUser.metal >= window.currentUser.asteroid_cost) {
+		    		affordable = true;
+		    	} else if (powercell && window.currentUser.metal >= window.currentUser.power_cell_cost) {
+		    		affordable = true;
+		    	}
+
+		    	if (affordable) {
+		    		$.ajax({
+		    			method: "POST",
+		    			url: '/api/user/resource/order',
+		    			headers: {
+		    				'X-CSRF-TOKEN': $('#token').attr('value')
+		    			},
+		    			data: {
+		    				asteroids: asteroid,
+		    				powercells: powercell
+		    			},
+		    			success: function(data) {
+		    				console.log(data);
+
+		    				window.currentUser = data.user;
+		    				updateResources();
+		    				updateResourceTable();
+		    			}
+		    		});
+		    	} else {
+		    		$("#resourceError").show();
+		    	}
 		    }
 		    window.placeResourceOrder = placeResourceOrder;
 
@@ -576,21 +603,6 @@
 		    	}
 		    }
 		    window.formAttack = formAttack;
-
-		    
-		    function checkResearch(researchId) {
-		    	var research = window.currentUser.research,
-		    		result = false;
-
-		    	for (var i = 0; i < research.length; i++) {
-		    		if(research[i].id === researchId) {
-		    			result = (research[i].state === 1) ? true : false;
-		    			break;
-		    		}
-		    	}
-
-		    	return result;
-		    }
 
 		    updateUser();
 		});

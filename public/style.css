@@ -30,30 +30,46 @@ body {
 
 
 /* Resource Tab */
-#currentResourceContainer, #resourceOrderForm {
+#resourceError {
+	font-size: 12px;
+	margin-bottom: 25px;
+	padding-top: 5px;
+}
+
+#resourceError .ui-icon-alert {
+	float:left;
+	margin-right: 5px;
+}
+
+#resourceOrderForm {
 	border: 1px solid #40e0d0;
 	border-radius: 5px;
 	background-color:rgba(50, 200, 50, 0.2);
 	padding: 5px;
-	margin-bottom: 50px;
-}
-
-#currentResourceContainer div {
-	font-size:12px;
+	margin: 30px 0;
 }
 
 #resourceOrderForm table {
 	background: none;
-}
-
-#asteroidOrder, #powerCellOrder {
-	margin: 5px;
+	border-collapse: initial;
+	border-spacing: 15px;
 }
 
 #resourceSubmit {
 	display: block;
 	margin: 0 auto;
 	margin-top: 10px;
+	width: 135px;
+}
+
+#powerCellLock .solarLock {
+	font-size: 12px;
+	margin: 8px 0 0 30px;
+}
+
+#powerCellLock .ui-icon-locked {
+	float:left;
+	margin-right: 5px;
 }
 
 
