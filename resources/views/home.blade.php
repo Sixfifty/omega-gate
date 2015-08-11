@@ -11,14 +11,14 @@
 		    <li><a href="#tabs-4">Research</a></li>
 		  </ul>
 		  <div id="tabs-1">
-		  	<div id="currentResourceContainer">
+		  	<!--<div id="currentResourceContainer">
 			  	<h4>Current Resources:</h4>
 			    <div>Asteroids: <span id="asteroidsTotal"></span></div>
 			    <div>Power Cells: <span id="powerCellsTotal"></span></div>
-			</div>
+			</div>-->
 
 		    <div id="resourceOrderForm">
-		    	<h4>[Order Form]</h4>
+		    	<!--<h4>[Order Form]</h4>
 			    <form>
 			    	<table>
 			    		<tr>
@@ -34,7 +34,32 @@
 			    		<tr>
 			    			<td colspan=3><input type='button' id="resourceSubmit" onClick="placeResourceOrder()" value='Submit'/></td>
 			    	</table>
-			    </form>
+			    </form>-->
+			    <h4>Current Resources:</h4>
+			    <table>
+			    	<tr>
+			    		<td></td>
+			    		<td>Quantity</td>
+			    		<td>Yield</td>
+			    		<td>Cost</td>
+			    		<td>Order</td>
+			    	</tr>
+			    	<tr>
+			    		<td>Asteroid</td>
+			    		<td><span id="asteroidTotal"></span></td>
+			    		<td><span id="asteroidYield"></span></td>
+			    		<td><span id="asteroidCost"></span></td>
+			    		<td><input type='button' id="resourceSubmit" onClick="placeResourceOrder(1,0)" value='Buy Asteroid'/></td>
+			    	</tr>
+			    	<tr>
+			    		<td>Power Cell</td>
+			    		<td><span id="powercellTotal"></span></td>
+			    		<td><span id="powercellYield"></span></td>
+			    		<td><span id="powercellCost"></span></td>
+			    		<td><input type='button' id="resourceSubmit" onClick="placeResourceOrder(0,1)" value='Buy Power Cell'/></td>
+			    	</tr>
+			    </table>
+
 			</div>
 		  </div>
 		  <div id="tabs-2">
@@ -261,13 +286,10 @@
 			    		ships = user.ships;
 			    	window.currentUser = user;
 
-			    	/* Populate Header and Resources */
+			    	/* Populate Header */
 					updateResources();
 					$('#userPlanet').html('Planet ' + user.planet_name);
 					$('#welcome').html('Greetings, Commander ' + user.username + '!');
-			    	$('#asteroidsTotal').html(user.asteroids);
-			    	$('#powerCellsTotal').html(user.power_cells);
-
 			    	if (user.defending_attacks.length > 0) {
 			    		var defendingAttacks = user.defending_attacks,
 			    			shortestAttack = defendingAttacks[0].ticks_remaining;
@@ -281,6 +303,15 @@
 			    		$("#attackWarning").html(warningHtml);
 			    		$("#attackWarning").show();
 			    	}
+
+			    	/* Populate Resources */
+			    	$('#asteroidTotal').html(user.asteroids);
+			    	$('#powercellTotal').html(user.power_cells);
+			    	//Add Asteroid Yield
+			    	//Add Power Cell Yield
+			    	$('#asteroidCost').html(user.asteroid_cost);
+			    	$('#powercellCost').html(user.power_cell_cost);
+
 
 			    	/* Populate Army */
 			    	var prerequisiteId,
@@ -407,9 +438,9 @@
 		    	return researchCls;
 		    }
 
-		    function placeResourceOrder() {
-		    	var asteroids = $('#asteroidOrder').val(),
-		    		powerCells = $('#powerCellOrder').val();
+		    function placeResourceOrder(asteroid, powercell) {
+		    	//Check User can afford this first!!!
+
 	    		$.ajax({
 	    			method: "POST",
 	    			url: '/api/user/resource/order',
@@ -417,8 +448,8 @@
 	    				'X-CSRF-TOKEN': $('#token').attr('value')
 	    			},
 	    			data: {
-	    				asteroids: asteroids,
-	    				powercells: powerCells
+	    				asteroids: asteroid,
+	    				powercells: powercell
 	    			},
 	    			success: function(data) {
 	    				console.log(data);
