@@ -76,8 +76,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $multiplier = 1;
         if($this->hasResearched(5)) $multiplier = 0.5;
+
+        $cost = self::ASTEROID_COST * ($this->asteroids + $this->asteroids_pending) * $multiplier;
+
+        if($cost === 0) $cost = self::ASTEROID_COST * $multiplier;
         
-        return (self::ASTEROID_COST * ($this->asteroids + $this->asteroids_pending)) * $multiplier;
+        return ($cost);
     }
 
     /**
@@ -88,8 +92,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $multiplier = 1;
         if($this->hasResearched(6)) $multiplier = 0.5;
 
-        return (self::POWERCELL_COST * ($this->power_cells + $this->power_cells_pending)) * $multiplier;
+        $cost = self::POWERCELL_COST * ($this->power_cells + $this->power_cells_pending) * $multiplier;
+
+       if($cost === 0) $cost = self::POWERCELL_COST * $multiplier;
         
+        return ($cost);
     }
 
     public function user_research() {
