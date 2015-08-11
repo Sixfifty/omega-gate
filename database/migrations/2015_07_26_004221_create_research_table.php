@@ -192,7 +192,7 @@ class CreateResearchTable extends Migration
             [
             'id' => 16,
             'name' => 'Cheaper Ships',
-            'description' => 'Reduces cost of ships by x1.1.',
+            'description' => 'Reduces cost of ships by 10%.',
             'metal_cost' => 4000,
             'energy_cost' => 200,
             'time_cost' => 8,

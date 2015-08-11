@@ -85,7 +85,7 @@
 						<div id="research3" class="researchBox"></div>
 					</td>
 					<td>
-						<div id="research4" class="researchBox"></div>
+						<div id="research4" class="researchBox" hidden></div>
 					</td>
 					<td>
 						<div id="research5" class="researchBox"></div>
