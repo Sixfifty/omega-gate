@@ -16,14 +16,19 @@ class Attack extends Model
 	];
 
     public function source() {
-    	return $this->belongs_to('OmegaGate\User');
+    	return $this->belongsTo('OmegaGate\User');
     }
 
     public function target() {
-    	return $this->belongs_to('OmegaGate\User');
+    	return $this->belongsTo('OmegaGate\User');
     }
 
     public function ships() {
-    	return $this->has_many('OmegaGate\Ship');
+    	return $this->hasMany('OmegaGate\AttackShip');
     }
+
+    public function isReturning() {
+        return $this->returning || $this->cancelled;
+    }
+
 }

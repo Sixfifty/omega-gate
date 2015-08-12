@@ -15,11 +15,11 @@ class AttackShip extends Model
     
 
     public function ship() {
-    	return $this->belongs_to('OmegaGate\Ship');
+    	return $this->belongsTo('OmegaGate\Ship');
     }
 
     public function attack() {
-    	return $this->belongs_to('OmegaGate\Attack');
+    	return $this->belongsTo('OmegaGate\Attack');
     }
 
 

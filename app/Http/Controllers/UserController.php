@@ -71,8 +71,6 @@ class UserController extends ApiController
             
         }
 
-        //$user->save();
-
         return $this->respond([
             'user' => $user,
         ]);
@@ -104,6 +102,7 @@ class UserController extends ApiController
 
     public function formAttack() {
         $user = \Auth::user();
+
         $attackInput = json_decode(\Input::get('attack'));
 
         
@@ -118,13 +117,43 @@ class UserController extends ApiController
         //     ]
         // }
         // 
+         
+        // Make a local cache of user ships and ships
+        $ships = [];
+        $userShips = [];
 
 
         //Before we do any of the below, I need to check that
-        // 1. The user can use the ships
-        // 2. The user has enough ships to cover the order
-        // 3. Verify the user being attacked, can be attacked
+        
+        // 1. Verify the user being attacked, can be attacked
+        $target = User::find($attackInput->target_id);
+        if(!$target) return $this->respondBadRequest('The target is invalid');
 
+        
+        foreach($attackInput->ships as $newAttackShip) {
+
+            // 2. We need to check that the ships really exist
+            $ship = Ship::find($newAttackShip->ship_id);
+            if(!$ship) return $this->respondBadRequest('The ship #' . $newAttackShip->ship_id . ' is invalid.');
+
+            // Cache this for later
+            $ships[$ship->id] = $ship;
+
+            // 3. The user has the ship type
+            $userShip = $user->user_ships()->where('ship_id', $newAttackShip->ship_id)->first();
+            if(!$userShip) return $this->respondBadRequest('The user does not have ship #' . $newAttackShip->ship_id);
+
+            // 4. The user has the ships to cover the order
+            $userShip = $user->user_ships()->where('ship_id', $newAttackShip->ship_id)->first();
+            if($userShip->quantity < $newAttackShip->quantity) return $this->respondBadRequest('The user does not have enough of ship #' . $newAttackShip->ship_id);          
+
+            // Store it in the array, save us looking for it later
+            $userShips[$ship->id] = $userShip;
+
+        }
+        
+
+        //Still here? Lets concoct the fleet.        
         $attack = new Attack();
         $attack->source_id = $user->id;
         $attack->target_id = $attackInput->target_id;
@@ -136,13 +165,21 @@ class UserController extends ApiController
         //Loop through all the ships
         foreach($attackInput->ships as $newAttackShip) {
 
-            $ship = Ship::find($newAttackShip->ship_id);
+            //Get the ship type and user ship
+            $ship = $ships[$newAttackShip->ship_id];
+            $userShip = $userShips[$newAttackShip->ship_id];
 
+            //No ship? Skip this one
             if(!$ship) continue;
 
             //If we have a slower ship, then we need to make that the ticks
             if($ship->speed > $attack->ticks_remaining) $attack->ticks_remaining = $ship->speed;
 
+            //Subtract the quantity from the user_ships table and save
+            $userShip->quantity -= $newAttackShip->quantity;
+            $userShip->save();
+
+            //Create the attack ship (super slim chance of ship loss)
             $attackShip = new AttackShip();
             $attackShip->ship_id = $ship->id;
             $attackShip->attack_id = $attack->id;
