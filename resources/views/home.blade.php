@@ -54,6 +54,12 @@
 			</div>
 		  </div>
 		  <div id="tabs-2">
+		  	<div id="armyError" class='ui-state-error ui-corner-all' hidden>
+		    	<p>
+		    		<span class="ui-icon ui-icon-alert"></span> 
+		    		<strong>Alert:</strong>You cannot afford all entered ships!
+		    	</p>
+		    </div>
 		    <div id="armyOrderForm">
 			</div>
 		  </div>
@@ -303,32 +309,8 @@
 			    	updateResourceTable();
 
 			    	/* Populate Army */
-			    	var prerequisiteId,
-			    		state;
-			    	var armyTable = "<h4>Army Status</h4><form><table><tr><td>Unit</td><td>Quantity</td><td>Pending</td><td>Cost</td><td>Order</td></tr>";
-			    	for(var i = 0; i < ships.length; i++) {
-			    		prerequisiteId = ships[i].prerequisite_id;
-			    		state = (prerequisiteId !== null) ? research[prerequisiteId - 1].state : 1;
-
-			    		if (state === 1) {
-				    		armyTable += "<tr><td>" + ships[i].name + "</td>";
-				    		armyTable += "<td>" + ships[i].quantity + "</td>";
-				    		armyTable += "<td>" + ships[i].quantity_pending + "</td>";
-				    		armyTable += "<td>" + ships[i].metal_cost + "[M] / " + ships[i].energy_cost + "[E]</td>";
-				    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "' shipid='" + ships[i].id + "' min='0'></td></tr>";
-				    	}
-			    	}
-			    	armyTable += "<tr><td colspan=5><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
-			    	$('#armyOrderForm').html(armyTable);
-
-
-			    	/****** Update order form!!  ******/
-			    	//Example
-					/*$('#asteroidOrder').on('input', function() {
-					    //alert("changed");
-
-					});*/
-
+			    	updateArmyTable();
+			    	
 
 					/* Populate Conquer	*/
 					var scanHtml,
@@ -416,6 +398,41 @@
 		    	$('#powercellCost').html(window.currentUser.power_cell_cost + "[M]");
 		    }
 
+		    function updateArmyTable() {
+		    	var prerequisiteId,
+		    		state,
+		    		ships = window.currentUser.ships,
+		    		research = window.currentUser.research;
+
+		    	var armyTable = "<h4>Army Status</h4><form><table><tr><td>Unit</td><td>Quantity</td><td>Pending</td><td>Cost</td><td>Order</td><td>Total</td></tr>";
+		    	for(var i = 0; i < ships.length; i++) {
+		    		prerequisiteId = ships[i].prerequisite_id;
+		    		state = (prerequisiteId !== null) ? research[prerequisiteId - 1].state : 1;
+
+		    		if (state === 1) {
+			    		armyTable += "<tr><td>" + ships[i].name + "</td>";
+			    		armyTable += "<td>" + ships[i].quantity + "</td>";
+			    		armyTable += "<td>" + ships[i].quantity_pending + "</td>";
+			    		armyTable += "<td>" + ships[i].metal_cost + "[M] / " + ships[i].energy_cost + "[E]</td>";
+			    		armyTable += "<td><input type='number' class='armyOrderField' id='armyField" + ships[i].id + "' shipid='" + ships[i].id + "' metal='" + ships[i].metal_cost + "' energy='" + ships[i].energy_cost + "' min='0'></td>";
+			    		armyTable += "<td><span class='armyMetalTotal' id='armyMetalTotal" + ships[i].id + "'>0</span>[M] / <span class='armyEnergyTotal' id='armyEnergyTotal" + ships[i].id + "'>0</span>[E]</td></tr>";
+			    	}
+		    	}
+		    	armyTable += "<tr></tr><tr><td colspan=5></td><td>Grand Total:</td><td><span id='armyMetalGrandTotal'></span>[M] / <span  id='armyEnergyGrandTotal'></span>[E]</td></tr><tr><td colspan=6><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
+		    	$('#armyOrderForm').html(armyTable);
+		    	updateArmyGrandTotal();
+		    	$('.armyOrderField').each(function(){
+		    		$(this).on('input', function() {
+		    			var metal = $(this).attr('metal') * $(this).val(),
+		    				energy = $(this).attr('energy') * $(this).val();
+
+		    			$("#armyMetalTotal" + $(this).attr('shipId')).html(metal);
+		    			$("#armyEnergyTotal" + $(this).attr('shipId')).html(energy);
+		    			updateArmyGrandTotal();
+		    		});
+		    	});
+		    }
+
 		   function checkResearch(researchId) {
 		    	var research = window.currentUser.research,
 		    		result = false;
@@ -472,8 +489,6 @@
 		    				powercells: powercell
 		    			},
 		    			success: function(data) {
-		    				console.log(data);
-
 		    				window.currentUser = data.user;
 		    				updateResources();
 		    				updateResourceTable();
@@ -485,44 +500,62 @@
 		    }
 		    window.placeResourceOrder = placeResourceOrder;
 
+		    function updateArmyGrandTotal() {
+		    	var metal = 0,
+		    		energy = 0;
+
+		    	$(".armyMetalTotal").each(function(){
+		    		metal += parseInt($(this).html());
+		    	});
+		    	$(".armyEnergyTotal").each(function(){
+		    		energy += parseInt($(this).html());
+		    	});
+		    	$("#armyMetalGrandTotal").html(metal);
+		    	$("#armyEnergyGrandTotal").html(energy);
+		    }
+
 		    function placeArmyOrder() {
 		    	var orders = [],
 		    		shipId,
 		    		quantity;
 
-		    	//For each input field in the orders table
-		    	$('#armyOrderForm').find('.armyOrderField').each(function () {
-		    		//Strip text from id
-		    		shipId = $(this).attr('shipid');
-		    		quantity = $(this).val();
+		    	$("#armyError").hide();
+		    	if (window.currentUser.metal >= $("#armyMetalGrandTotal").html() && window.currentUser.energy >= $("#armyEnergyGrandTotal").html()) {
+			    	//For each input field in the orders table
+			    	$('#armyOrderForm').find('.armyOrderField').each(function () {
+			    		shipId = $(this).attr('shipid');
+			    		quantity = $(this).val();
 
-		    		console.log(shipId);
+			    		if (quantity > 0) {
+			    			orders.push({
+			    				ship_id: shipId,
+			    				quantity: quantity,
+			    			});
+			    		}
+			    	});
 
-		    		if (quantity > 0) {
-		    			orders.push({
-		    				ship_id: shipId,
-		    				quantity: quantity,
-		    			});
-		    		}
-		    	});
+			    	if (orders.length > 0) {
+				    	$.ajax({
+			    			method: "POST",
+			    			url: '/api/user/army/order',
+			    			headers: {
+			    				'X-CSRF-TOKEN': $('#token').attr('value')
+			    			},
+			    			data: {
+			    				orders: JSON.stringify(orders)
+			    			},
+			    			success: function(data) {		    				
+			    				window.currentUser = data.user;
+			    				$('#armyOrderForm').empty();
+			    				updateResources();
+			    				updateArmyTable();
 
-		    	console.log(orders);
-
-		    	if (orders.length > 0) {
-			    	$.ajax({
-		    			method: "POST",
-		    			url: '/api/user/army/order',
-		    			headers: {
-		    				'X-CSRF-TOKEN': $('#token').attr('value')
-		    			},
-		    			data: {
-		    				orders: JSON.stringify(orders)
-		    			},
-		    			success: function(data) {		    				
-		    				console.log(data);
-		    			}
-		    		});
-			    }
+			    			}
+			    		});
+				    }
+				} else {
+					$("#armyError").show();
+				}
 		    }
 		    window.placeArmyOrder = placeArmyOrder;
 
