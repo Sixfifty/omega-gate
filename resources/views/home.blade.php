@@ -310,7 +310,7 @@
 
 			    	/* Populate Army */
 			    	updateArmyTable();
-			    	
+
 
 					/* Populate Conquer	*/
 					var scanHtml,
@@ -418,7 +418,7 @@
 			    		armyTable += "<td><span class='armyMetalTotal' id='armyMetalTotal" + ships[i].id + "'>0</span>[M] / <span class='armyEnergyTotal' id='armyEnergyTotal" + ships[i].id + "'>0</span>[E]</td></tr>";
 			    	}
 		    	}
-		    	armyTable += "<tr></tr><tr><td colspan=5></td><td>Grand Total:</td><td><span id='armyMetalGrandTotal'></span>[M] / <span  id='armyEnergyGrandTotal'></span>[E]</td></tr><tr><td colspan=6><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
+		    	armyTable += "<tr></tr><tr><td colspan=4></td><td>Grand Total:</td><td><span id='armyMetalGrandTotal'></span>[M] / <span  id='armyEnergyGrandTotal'></span>[E]</td></tr><tr><td colspan=6><input type='button' id='armySubmit' onClick='placeArmyOrder()' value='Submit'/></td></tr></table></form>";
 		    	$('#armyOrderForm').html(armyTable);
 		    	updateArmyGrandTotal();
 		    	$('.armyOrderField').each(function(){
