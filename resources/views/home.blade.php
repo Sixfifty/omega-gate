@@ -68,6 +68,7 @@
 			    <div id='scanContainer'>
 			    	<h4>Planetary Scanning</h4>
 			    	<div id='scanInner'></div>
+			    	<div id='scanResults'></div>
 			    </div>
 			    <div id='invasionContainer'>
 			    	<h4>Invasion</h4>
@@ -315,20 +316,25 @@
 					/* Populate Conquer	*/
 					var scanHtml,
 						invasionHtml,
-						selectHtml = "<table><tr><td>Select Planet:</td><td><select class='selectMenu'>";
+						selectHtml = "<table><tr><td>Select Planet:</td><td><select class='selectMenu'>",
+						scanResearch = checkResearch(10);
 						for (var i = 0; i < data.planets.length; i++) {
 							if (data.planets[i].id !== user.id) {
 								selectHtml += "<option value=" + data.planets[i].id + ">" + data.planets[i].name + "</option>";
 							}
 						}
-						selectHtml += "</select></td></table>";
+						selectHtml += "</select></td><td class='buttonColumn'></td></table>";
 
-					if(checkResearch(10)) {
-						scanHtml = selectHtml;
+					if(scanResearch) {
+						scanHtml = "Scan Accuracy: <span>" + getScanStatus() + "</span><br/>";
+						scanHtml += selectHtml;
 					} else {
 						scanHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Scanning to unlock this feature.</p></div>";
 					}
 					$('#scanInner').html(scanHtml);
+					if (scanResearch) {
+						$('#scanInner').find('.buttonColumn').html("<input type='button' id='scanSubmit' onClick='submitScan()' value='Scan Planet'/>");
+					}
 
 					if(checkResearch(14)) {
 						if (user.attacks.length > 0) {
@@ -431,6 +437,46 @@
 		    			updateArmyGrandTotal();
 		    		});
 		    	});
+		    }
+
+		    function getScanStatus() {
+		    	var result;
+
+		    	if (checkResearch(11)) {
+		    		result = "Exact unit numbers, ";
+		    	} else {
+		    		result = "Rough unit estimates, ";
+		    	}
+
+		    	if (checkResearch(13)) {
+		    		result += "exact stealthed unit numbers.";
+		    	} else if (checkResearch(12)) {
+		    		result += "rough stealthed unit estimates.";
+		    	} else {
+		    		result += "no stealth unit detection.";
+		    	}
+		    	return result;
+		    }
+
+		    function updateScanResults(data) {
+		    	var scanHtml,
+		    		army = data.targetArmy;
+				$("#scanResults").empty();
+
+				scanHtml = "<span>Scan results of <strong>Planet " + data.targetName + ":</strong><span>";
+
+				if (army.length > 0) {
+					scanHtml += "<table><tr><td>Unit</td><td>Quantity</td></tr>";
+					for(var i = 0; i < army.length; i++) {
+						scanHtml += "<tr><td>" + army[i].name + "</td>";
+						scanHtml += "<td>" + army[i].quantity + "</td></tr>";
+					}
+					scanHtml += "</table>";
+				} else {
+					scanHtml += "<span> This planet has no army!</span>";
+				}
+
+		    	$("#scanResults").html(scanHtml);
 		    }
 
 		   function checkResearch(researchId) {
@@ -544,7 +590,7 @@
 			    			data: {
 			    				orders: JSON.stringify(orders)
 			    			},
-			    			success: function(data) {		    				
+			    			success: function(data) {	   				
 			    				window.currentUser = data.user;
 			    				$('#armyOrderForm').empty();
 			    				updateResources();
@@ -587,6 +633,25 @@
 	    		}
 		    }
 		    window.beginResearch = beginResearch;
+
+		    function submitScan() {
+		    	var targetId = $("#scanInner").find(".selectMenu").val();
+
+		    	$.ajax({
+	    			method: "POST",
+	    			url: '/api/user/scan',
+	    			headers: {
+	    				'X-CSRF-TOKEN': $('#token').attr('value')
+	    			},
+	    			data: {
+	    				target_id: targetId
+	    			},
+	    			success: function(data) {
+	    				updateScanResults(data);
+	    			}
+	    		});
+		    }
+		    window.submitScan = submitScan;
 
 		    function formAttack() {
 		    	var shipsList = [],

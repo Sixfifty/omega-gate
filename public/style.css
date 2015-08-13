@@ -148,6 +148,10 @@ body {
 	margin-left: 10px;
 }
 
+#scanResults {
+	margin-top: 20px;
+}
+
 
 /* Research Tab */
 #researchError {

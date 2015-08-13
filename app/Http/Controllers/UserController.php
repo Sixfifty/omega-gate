@@ -100,6 +100,60 @@ class UserController extends ApiController
 
     }
 
+    public function requestScan() {
+        $output = [];
+        $user = \Auth::user();
+        $targetId = \Input::get('target_id');
+        $targetUser = User::find($targetId);
+        $targetArmy = $targetUser->user_ships;
+
+        $upgradedScan = $user->hasResearched(11);
+        $stealthScan = $user->hasResearched(12);
+        $fullScan = $user->hasResearched(13);
+
+        foreach($targetArmy as $targetShip) {
+            if($targetShip->quantity > 0) {
+                $shipInfo = Ship::find($targetShip->ship_id);
+
+                //Prevent including stealth ships if this hasn't been researched!
+                if ($shipInfo->stealth) {
+                    if($stealthScan) {
+                        $quantity = ($fullScan) ? $targetShip->quantity : $this->roughScanResult($targetShip->quantity);
+                        $ship = [
+                            'name' => $shipInfo->name,
+                            'quantity' => $targetShip->quantity
+                        ];
+                        $output[] = $ship;
+                    }
+                } else {
+                    $quantity = ($upgradedScan) ? $targetShip->quantity : $this->roughScanResult($targetShip->quantity);
+                    $ship = [
+                        'name' => $shipInfo->name,
+                        'quantity' => $quantity
+                    ];
+                    $output[] = $ship;
+                } 
+            }
+        }
+
+        return $this->respond([
+            'targetName' => $targetUser->planet_name,
+            'targetArmy' => $output
+        ]);
+    }
+
+    public function roughScanResult($exactNumber) {
+        $roundToHundred = round($exactNumber, -2);
+
+        if ($roundToHundred > 0) {
+            $result = "Around ".$roundToHundred." units.";
+        } else {
+            $result = "Between 0 and 100 units.";
+        }
+
+        return $result;
+    }
+
     public function formAttack() {
         $user = \Auth::user();
 
