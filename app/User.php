@@ -414,6 +414,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $newItem['energy_cost'] = ($newItem['energy_cost'] * 0.9);
             }
 
+            //Attack +1 researches
+            if ($this->hasResearched(22)) $newItem['attack']++;
+            if ($this->hasResearched(27)) $newItem['attack']++;
+
+            //HP +2 researches
+            if ($this->hasResearched(23)) $newItem['hp'] += 2;
+            if ($this->hasResearched(25)) $newItem['hp'] += 2;
+
+            //Speed -1 researches
+            if ($this->hasResearched(24)) $newItem['speed']--;
+            if ($this->hasResearched(26)) $newItem['speed']--;
+
+
             if (array_key_exists($ship->id, $userShips)) {
                 $newItem['quantity'] = $userShips[$ship->id];
             } else {
