@@ -121,7 +121,7 @@ class UserController extends ApiController
                         $quantity = ($fullScan) ? $targetShip->quantity : $this->roughScanResult($targetShip->quantity);
                         $ship = [
                             'name' => $shipInfo->name,
-                            'quantity' => $targetShip->quantity
+                            'quantity' => $quantity
                         ];
                         $output[] = $ship;
                     }

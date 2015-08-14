@@ -70,6 +70,12 @@
 			    	<div id='scanInner'></div>
 			    	<div id='scanResults'></div>
 			    </div>
+			    <div id="invasionError" class='ui-state-error ui-corner-all' hidden>
+			    	<p>
+			    		<span class="ui-icon ui-icon-alert"></span> 
+			    		<strong>Alert:</strong>You do not own all entered attack ships!
+			    	</p>
+		    	</div>
 			    <div id='invasionContainer'>
 			    	<h4>Invasion</h4>
 			    	<div id='invasionInner'></div>
@@ -656,13 +662,21 @@
 		    function formAttack() {
 		    	var shipsList = [],
 		    		targetId,
-		    		attack;
+		    		attack,
+		    		currentQuantity,
+		    		armyCheck = true;
+
+		    	$("#invasionError").hide();
 
 		    	//For each input field in the attack table
 		    	$('#invasionInner').find('.invasionOrderField').each(function () {
-		    		//Strip text from id
 		    		shipId = $(this).attr('shipid');
 		    		quantity = $(this).val();
+		    		currentQuantity = $(this).parent().prev().html();
+
+		    		if(quantity !== "" && parseInt(quantity) > parseInt(currentQuantity)) {
+		    			armyCheck = false;
+		    		}
 
 		    		if (quantity > 0) {
 		    			shipsList.push({
@@ -673,31 +687,37 @@
 		    	});
 
 		    	if (shipsList.length > 0) {
-		    		targetId = $("#invasionInner").find(".selectMenu").val();
+		    		if (armyCheck) {
+			    		targetId = $("#invasionInner").find(".selectMenu").val();
 
-		    		attack = {
-		    			target_id: targetId,
-		    			ships: shipsList
-		    		}
+			    		attack = {
+			    			target_id: targetId,
+			    			ships: shipsList
+			    		}
 
-		    		$.ajax({
-		    			method: "POST",
-		    			url: '/api/user/attack/create',
-		    			headers: {
-		    				'X-CSRF-TOKEN': $('#token').attr('value')
-		    			},
-		    			data: {
-		    				attack: JSON.stringify(attack)
-		    			},
-		    			success: function(data) {
-		    				if (data.attack) {
-		    					$("#invasionInner").empty();
+			    		$.ajax({
+			    			method: "POST",
+			    			url: '/api/user/attack/create',
+			    			headers: {
+			    				'X-CSRF-TOKEN': $('#token').attr('value')
+			    			},
+			    			data: {
+			    				attack: JSON.stringify(attack)
+			    			},
+			    			success: function(data) {
+			    				if (data.attack) {
+			    					$("#invasionInner").empty();
 
-		    					var progressHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently attacking. ETA: " + data.attack.ticks_remaining + " ticks.</p></div>";
-		    					$("#invasionInner").html(progressHtml);
-		    				}
-		    			}
-		    		});
+			    					var progressHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently attacking. ETA: " + data.attack.ticks_remaining + " ticks.</p></div>";
+			    					$("#invasionInner").html(progressHtml);
+									window.currentUser = data.user;
+			    					updateArmyTable();
+			    				}
+			    			}
+			    		});
+					} else {
+						$("#invasionError").show();
+					}
 		    	}
 		    }
 		    window.formAttack = formAttack;
