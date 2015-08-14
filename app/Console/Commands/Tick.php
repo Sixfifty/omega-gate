@@ -119,6 +119,9 @@ class Tick extends Command
                 //If no more ticks now, then we attack!
                 if(!$attack->ticks_remaining) {
 
+                    //Let's create an attack log (for defense logs .etc)
+                    \OmegaGate\AttackLog::createFromAttack($attack);
+
 
                     $defender = $attack->target;
                     $attacker = $attack->source;
