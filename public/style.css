@@ -235,6 +235,10 @@ body {
 	margin-left: 120px;
 }
 
+.researchButton {
+	color: #272b30;
+}
+
 /* Available */
 .researchBox.researchAvailable {
 	border-color: #26b3f7;
