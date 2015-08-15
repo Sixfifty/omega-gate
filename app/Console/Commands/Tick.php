@@ -122,7 +122,6 @@ class Tick extends Command
                     //Let's create an attack log (for defense logs .etc)
                     \OmegaGate\AttackLog::createFromAttack($attack);
 
-
                     $defender = $attack->target;
                     $attacker = $attack->source;
 
@@ -130,38 +129,61 @@ class Tick extends Command
                     $defenderShips = $defender->user_ships()->get();
                     $attackShips = $attack->ships;
 
+
                     //Get the speed array for the defender
                     $finalDefence = [];
                     foreach($defenderShips as $ships) {
                         $ship = $ships->ship;
-                        $arrShip = $ship->getUserStats($defender);
-                        $arrShip['quantity'] = $ships->quantity;
-                        if(!array_key_exists($arrShip['speed'], $finalDefence)) $finalDefence[$arrShip['speed']] = [];
-                        $finalDefence[$arrShip['speed']][] = $arrShip;
+                        if($ship) {
+                            $arrShip = $ship->getUserStats($defender);
+                            $arrShip['quantity'] = $ships->quantity;
+                            $arrShip['model'] = $ships;
+                            if(!array_key_exists($arrShip['speed'], $finalDefence)) $finalDefence[$arrShip['speed']] = [];
+                            $finalDefence[$arrShip['speed']][] = $arrShip;
+                        }
                     }
 
                     $finalAttack = [];
                     foreach($attackShips as $ships) {
                         $ship = $ships->ship;
-                        $arrShip = $ship->getUserStats($attacker);
-                        $arrShip['quantity'] = $ships->quantity;
-                        if(!array_key_exists($arrShip['speed'], $finalAttack)) $finalAttack[$arrShip['speed']] = [];
-                        $finalAttack[$arrShip['speed']][] = $arrShip;
+                        if($ship) {
+                            $arrShip = $ship->getUserStats($attacker);
+                            $arrShip['quantity'] = $ships->quantity;
+                            $arrShip['model'] = $ships;
+                            if(!array_key_exists($arrShip['speed'], $finalAttack)) $finalAttack[$arrShip['speed']] = [];
+                            $finalAttack[$arrShip['speed']][] = $arrShip;
+                        }
                     }
 
 
 
                     //Walk through the lists until one of them is empty
                     while(!empty($finalAttack) && !empty($finalDefence)) {
-                        echo 'beep';
 
+                        //Shift the first ships out of the arrays
                         $firstAttack = array_shift($finalAttack);
                         $firstAttackShip = array_shift($firstAttack);
-                        //dd($firstAttackShip);
 
                         $firstDefence = array_shift($finalDefence);
                         $firstDefenceShip = array_shift($firstDefence);
 
+
+
+                        // Work out the attack chance for success in percent
+                        if($firstAttackShip['attack'] == $firstDefenceShip['hp']) {
+                            $chance = 50;
+                        } else if($firstAttackShip['attack'] > $firstDefenceShip['hp']) {
+                            $chance = 50 + (($firstAttackShip['attack'] - $firstDefenceShip['hp']) * 5);
+                        } else {
+                            $chance = 50 - (($firstDefenceShip['hp'] - $firstAttackShip['attack']) * 5);
+                        }
+
+                        //We must allow some chance of success
+                        if($chance > 95) {
+                            $chance = 95;
+                        } else if ($chance < 5) {
+                            $chance = 5;
+                        }
 
                         //Work out the precentage chance of win
                         /*
@@ -204,31 +226,45 @@ class Tick extends Command
                         
                         while($firstAttackShip['quantity'] && $firstDefenceShip['quantity']) {
                             //Do the attack
-                            if($faker->boolean(80)) {
-                                echo "attack wins \n";
+                            if($faker->boolean($chance)) {
+                                echo "$chance - attack wins \n";
                                 $firstDefenceShip['quantity']--;
                             } else {
-                                echo "defence wins \n";
+                                echo "$chance - defence wins \n";
                                 $firstAttackShip['quantity']--;
                             }
                         }
-
+                        
                        
                         
                         //Put the winner, back in (because they haven't had enough punishment yet)
+                        $attackModel = $firstAttackShip['model'];
+                        $defenceModel = $firstDefenceShip['model'];
                         if($firstAttackShip['quantity'] > 0) {
                             //Put the ship back in the speed
                             array_unshift($firstAttack, $firstAttackShip);
                             $finalAttack[$firstAttackShip['speed']][] = $firstAttack;
+                            //Persist quantity to DB
+                            $attackModel->quantity = $firstAttackShip['quantity'];
+                            $attackModel->save();
+                        } else {
+                            //Delete if all gone
+                            $attackModel->delete();
                         }
 
                         if($firstDefenceShip['quantity'] > 0) {
                             //Put the ship back in the speed
                             array_unshift($firstDefence, $firstDefenceShip);
                             $finalDefence[$firstDefenceShip['speed']][] = $firstDefence;
+                            $model = $firstAttackShip['model'];
                         }
-                        
+                        //Persist quantity to DB
+                        $defenceModel->quantity = $firstDefenceShip['quantity'];
+                        $defenceModel->save();
+
                     }
+
+                    //Save ships to the database
 
                     //Loot.
 
