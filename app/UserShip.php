@@ -12,4 +12,9 @@ class UserShip extends Model
     	$this->quantity += $this->quantity_pending;
     	$this->quantity_pending = 0;
     }
+
+    public function ship() {
+    	return $this->belongsTo('OmegaGate\Ship');
+    }
 }
+

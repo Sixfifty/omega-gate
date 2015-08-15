@@ -130,46 +130,115 @@ class Tick extends Command
                     $defenderShips = $defender->user_ships()->get();
                     $attackShips = $attack->ships;
 
-                    //---------- FAKE ATTACK LOGIC, REPLACE THIS --------------
+                    //Get the speed array for the defender
+                    $finalDefence = [];
+                    foreach($defenderShips as $ships) {
+                        $ship = $ships->ship;
+                        $arrShip = $ship->getUserStats($defender);
+                        $arrShip['quantity'] = $ships->quantity;
+                        if(!array_key_exists($arrShip['speed'], $finalDefence)) $finalDefence[$arrShip['speed']] = [];
+                        $finalDefence[$arrShip['speed']][] = $arrShip;
+                    }
 
-                    //I'm just going to randomly flip a coin for each of the attack ships
-                    foreach($attackShips as $ship) {
+                    $finalAttack = [];
+                    foreach($attackShips as $ships) {
+                        $ship = $ships->ship;
+                        $arrShip = $ship->getUserStats($attacker);
+                        $arrShip['quantity'] = $ships->quantity;
+                        if(!array_key_exists($arrShip['speed'], $finalAttack)) $finalAttack[$arrShip['speed']] = [];
+                        $finalAttack[$arrShip['speed']][] = $arrShip;
+                    }
 
-                        //50/50 flip
-                        if($faker->boolean) {
-                            //this lot dies... mwahahahahahahahaaa
-                            $ship->delete();
-                        } else {
 
-                            //Do they take damage?
-                            if($faker->boolean) {
-                                $ship->quantity = $faker->numberBetween(1, $ship->quantity);
-                                $ship->save();
+
+                    //Walk through the lists until one of them is empty
+                    while(!empty($finalAttack) && !empty($finalDefence)) {
+                        echo 'beep';
+
+                        $firstAttack = array_shift($finalAttack);
+                        $firstAttackShip = array_shift($firstAttack);
+                        //dd($firstAttackShip);
+
+                        $firstDefence = array_shift($finalDefence);
+                        $firstDefenceShip = array_shift($firstDefence);
+
+
+                        //Work out the precentage chance of win
+                        /*
+                             When attacking something:
+
+                                If attacking ship's att === recieving ship's hp, chance to kill is 50%.
+                                
+                                For each point of difference between the two, add or subtract 5%.
+
+                                So:
+
+                                Att     HP      Chance to Kill
+                                4       4       50%
+                                5       4       55%
+                                12      4       90%
+                                4       12      10%
+
+                                Exception are Ragnaroks with their bloody 40HP/40Att...
+                                In this event, cap it at 95% :p
+
+                                if (att === hp) {
+                                    chance = 50;
+                                } else if (att > hp) {
+                                    chance = 50 + ((att - hp)*5);
+                                } else {
+                                    chance = 50 - ((hp - att)*5);
+                                }
+
+                                if (chance > 95) {
+                                    chance = 95;
+                                }
+
+                                if (chance < 5) {
+                                    chance = 5;
+                                }
+
+                            */
+
+                        //Put the real single ship vs single ship logic here
+                        
+                        while($firstAttackShip['quantity'] && $firstDefenceShip['quantity']) {
+                            //Do the attack
+                            if($faker->boolean(80)) {
+                                echo "attack wins \n";
+                                $firstDefenceShip['quantity']--;
+                            } else {
+                                echo "defence wins \n";
+                                $firstAttackShip['quantity']--;
                             }
                         }
 
-
-                    }
-
-                    //Lets do the same with the defender ships
-                    foreach($defenderShips as $ship) {
-
-                        //If they have any ships of this kind...
-                        if($ship->quantity) {
-
-                            //50/50 flip
-                            if($faker->boolean) {
-                                //Destroying the whole ship is unfair...
-                                //so I'll just take a random number between.
-                                $ship->quantity = $faker->numberBetween(0, $ship->quantity);
-                                $ship->save();
-                            }
+                       
+                        
+                        //Put the winner, back in (because they haven't had enough punishment yet)
+                        if($firstAttackShip['quantity'] > 0) {
+                            //Put the ship back in the speed
+                            array_unshift($firstAttack, $firstAttackShip);
+                            $finalAttack[$firstAttackShip['speed']][] = $firstAttack;
                         }
+
+                        if($firstDefenceShip['quantity'] > 0) {
+                            //Put the ship back in the speed
+                            array_unshift($firstDefence, $firstDefenceShip);
+                            $finalDefence[$firstDefenceShip['speed']][] = $firstDefence;
+                        }
+                        
                     }
 
-        
+                    //Loot.
 
-                    //---------- END FAKE ATTACK LOGIC ------------------
+                    //If attacker had Salvage, 20% of destroyed resources back
+                    //If defender has Salvage, 30% of destroyed resources back
+
+                    //If there is an attacking force left
+                    //For % of total defender ships destroyed
+                    //Take total asteroids/powercells, deduct the safe 5. Give the attacker 10% of both + percentage of ships lost
+
                     
                     
                     if($attack->ships()->count()) {

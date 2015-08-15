@@ -163,6 +163,12 @@ body {
 	margin-top: 20px;
 }
 
+#defenceInner {
+	max-height: 300px;
+	overflow: auto;
+	margin-top: 25px;
+}	
+
 
 /* Research Tab */
 #researchError {

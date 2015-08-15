@@ -296,16 +296,23 @@
 					$('#welcome').html('Greetings, Commander ' + user.username + '!');
 			    	if (user.defending_attacks.length > 0) {
 			    		var defendingAttacks = user.defending_attacks,
-			    			shortestAttack = defendingAttacks[0].ticks_remaining;
+			    			shortestAttack = 8,
+			    			attackPlanetCount = 0;
 
 			    		for (var i = 0; i < defendingAttacks.length; i++) {
-			    			if (defendingAttacks[i].ticks_remaining < shortestAttack) {
-			    				shortestAttack = defendingAttacks[i].ticks_remaining;
-			    			}
+			    			if (defendingAttacks[i].ticks_remaining > 0) {
+				    			if (defendingAttacks[i].ticks_remaining < shortestAttack) {
+				    				shortestAttack = defendingAttacks[i].ticks_remaining;
+				    			}
+				    			attackPlanetCount++;
+				    		}
 			    		}
-			    		var warningHtml = "<p><span class='ui-icon ui-icon-alert'></span><strong>WARNING:</strong> You are under attack from " + defendingAttacks.length + " planet(s)! Earliest attack will arrive in <strong>" + shortestAttack + " ticks!</strong></p>";
-			    		$("#attackWarning").html(warningHtml);
-			    		$("#attackWarning").show();
+
+			    		if (attackPlanetCount > 0) {
+				    		var warningHtml = "<p><span class='ui-icon ui-icon-alert'></span><strong>WARNING:</strong> You are under attack from " + defendingAttacks.length + " planet(s)! Earliest attack will arrive in <strong>" + shortestAttack + " ticks!</strong></p>";
+				    		$("#attackWarning").html(warningHtml);
+				    		$("#attackWarning").show();
+			    		}
 			    	}
 
 			    	/* Populate Resources */
@@ -322,6 +329,8 @@
 					/* Populate Conquer	*/
 					var scanHtml,
 						invasionHtml,
+						defenceHtml,
+						defences = user.logs.defence,
 						selectHtml = "<table><tr><td>Select Planet:</td><td><select class='selectMenu'>",
 						scanResearch = checkResearch(10);
 						for (var i = 0; i < data.planets.length; i++) {
@@ -344,7 +353,11 @@
 
 					if(checkResearch(14)) {
 						if (user.attacks.length > 0) {
+							if (user.attacks[0].ticks_remaining > 0) {
 							invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently attacking. ETA: " + user.attacks[0].ticks_remaining + " ticks.</p></div>";
+							} else {
+								invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>Currently returning home. ETA: " + user.attacks[0].home_ticks_remaining + " ticks.</p></div>";
+							}
 						} else {
 							var stealth;
 							invasionHtml = selectHtml;
@@ -367,10 +380,20 @@
 						invasionHtml = "<div class='featureLock'><p><span class='ui-icon ui-icon-locked'></span>You must research Warp Travel to unlock this feature.</p></div>";
 					}
 					$('#invasionInner').html(invasionHtml);
-
 					$('.selectMenu').selectmenu();
 
 
+					if (defences.length > 0) {
+						defenceHtml = "<table><tr><td>Planet</td><td>Invaded on</td></tr>";
+						for (var i = 0; i < defences.length; i++) {
+							defenceHtml += "<tr><td>" + defences[i].source_name + "</td><td>" + defences[i].created_at + "</td></tr>";
+						}
+						defenceHtml += "</table>";
+					} else {
+						defenceHtml = "No attacks have occured on your planet.";
+					}
+
+					$("#defenceInner").html(defenceHtml);
 
 			    	/* Populate Research */
 			    	var researchClass;

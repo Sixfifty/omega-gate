@@ -32,6 +32,7 @@ class AttackLog extends Model
     public function toArray() {
         return [
             'source_id' => (int) $this->source_id,
+            'source_name' => User::find($this->source_id)->planet_name,
             'target_id' => (int) $this->target_id,
             'created_at' => (string) $this->created_at
         ];
