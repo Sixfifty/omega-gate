@@ -279,11 +279,24 @@ class Tick extends Command
                     
                     if($attack->ships()->count()) {
                         $attack->returning = true;
-                        $action = 'successfully attacks';    
+                        $action = 'successfully attacks';
+
+                        //Asteroid loot
+                        $defender->asteroids = $defender->asteroids > 10 ? $defender->asteroids - 5  : 5;
+                        $attacker->asteroids += 5;
+                        $defender->save();
+                        $attacker->save();
+
                     } else {
                         //delete the attack...
                         $attack->delete();
                         echo "\t{$attack->id}: Destroyed\n";
+
+                        //Asteroid loot
+                        $attacker->asteroids = $attacker->asteroids > 10 ? $attacker->asteroids - 5  : 5;
+                        $defender->asteroids += 5;
+                        $attacker->save();
+                        $defender->save();
                         continue;
                     }
                     
