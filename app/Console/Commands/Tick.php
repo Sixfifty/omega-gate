@@ -243,7 +243,7 @@ class Tick extends Command
                         if($firstAttackShip['quantity'] > 0) {
                             //Put the ship back in the speed
                             array_unshift($firstAttack, $firstAttackShip);
-                            $finalAttack[$firstAttackShip['speed']][] = $firstAttack;
+                            $finalAttack[$firstAttackShip['speed']] = $firstAttack;
                             //Persist quantity to DB
                             $attackModel->quantity = $firstAttackShip['quantity'];
                             $attackModel->save();
@@ -255,7 +255,7 @@ class Tick extends Command
                         if($firstDefenceShip['quantity'] > 0) {
                             //Put the ship back in the speed
                             array_unshift($firstDefence, $firstDefenceShip);
-                            $finalDefence[$firstDefenceShip['speed']][] = $firstDefence;
+                            $finalDefence[$firstDefenceShip['speed']] = $firstDefence;
                             $model = $firstAttackShip['model'];
                         }
                         //Persist quantity to DB
